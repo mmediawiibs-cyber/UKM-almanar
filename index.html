@@ -1061,6 +1061,7 @@
     </div>
 
     <!-- SCRIPT UTAMA BERBASIS FIREBASE -->
+    <!-- SCRIPT UTAMA BERBASIS FIREBASE -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
       import {
@@ -1083,7 +1084,7 @@
       const app = initializeApp(firebaseConfig);
       window.db = getFirestore(app);
 
-      // Mock Alerts (Tetap dipertahankan)
+      // Mock Alerts
       window.alert = function (msg) {
         const dialog = document.createElement("div");
         dialog.style.cssText =
@@ -1231,9 +1232,10 @@
         dashWeekOffset = 0;
       const $ = (id) => document.getElementById(id);
 
-      window.monthCache = {}; // Pengganti localStorage jadwal
-      window.inactiveCache = new Set(); // Pengganti localStorage status mahasiswa
-      window.noteCache = { published: "", published_ts: "" }; // Pengganti localStorage catatan
+      window.monthCache = {};
+      window.inactiveCache = new Set();
+      // PERUBAHAN: Cache catatan sekarang berbentuk Array
+      window.noteCache = { notes: [] };
 
       // 4. Utils
       function activeMonth() {
@@ -1258,7 +1260,7 @@
         return dateKey(d);
       }
 
-      // 5. Autentikasi (Didaftarkan ke Window)
+      // 5. Autentikasi
       window.doLogin = async () => {
         const akses = $("loginAkses").value;
         const pass = $("loginPass").value;
@@ -1281,7 +1283,7 @@
           $("loginOverlay").style.display = "none";
           $("loginPass").value = "";
 
-          await loadDataAndRenderUI(); // Tarik data dari Firestore sebelum menampilkan halaman
+          await loadDataAndRenderUI();
         }
       };
 
@@ -1343,7 +1345,7 @@
           if (snap.exists()) {
             window.monthCache[key] = snap.data().jadwal;
           } else {
-            window.monthCache[key] = buildMonthSchedule(g, m); // Template default
+            window.monthCache[key] = buildMonthSchedule(g, m);
           }
         }
       }
@@ -1363,11 +1365,9 @@
         }
       };
 
-      // Ini adalah jantung aplikasi, dipanggil saat navigasi waktu atau pertama kali login
       async function loadDataAndRenderUI() {
         $("loadingOverlay").style.display = "flex";
         try {
-          // 1. Unduh status mahasiswa nonaktif
           const statusSnap = await getDoc(
             doc(window.db, "status_mahasiswa", group),
           );
@@ -1375,18 +1375,17 @@
             ? new Set(statusSnap.data().inactive || [])
             : new Set();
 
-          // 2. Unduh Catatan
+          // PERUBAHAN: Tarik array catatan
           const noteSnap = await getDoc(
             doc(window.db, "catatan_jadwal", group),
           );
-          window.noteCache = noteSnap.exists()
-            ? noteSnap.data()
-            : { published: "", published_ts: "" };
+          window.noteCache =
+            noteSnap.exists() && noteSnap.data().notes
+              ? noteSnap.data()
+              : { notes: [] };
 
-          // 3. Unduh jadwal bulan ini
           await fetchMonthData(group, activeMonth());
 
-          // 4. Unduh jadwal pekanan dashboard (berpotensi menyeberang ke bulan berikutnya/sebelumnya)
           const now = new Date();
           const day = now.getDay();
           const diff =
@@ -1397,17 +1396,17 @@
           await fetchMonthData(
             group,
             new Date(new Date(monday).setDate(monday.getDate() + 3)),
-          ); // Kamis
+          );
           await fetchMonthData(
             group,
             new Date(new Date(monday).setDate(monday.getDate() + 4)),
-          ); // Jumat
+          );
           await fetchMonthData(
             group,
             new Date(new Date(monday).setDate(monday.getDate() + 5)),
-          ); // Sabtu
+          );
 
-          renderUI(); // Eksekusi gambar HTML
+          renderUI();
         } catch (e) {
           console.error(e);
           alert("Gagal terhubung ke Server Firebase!");
@@ -1424,7 +1423,6 @@
         const m = activeMonth();
         document.body.dataset.group = group;
 
-        // Hak Akses Navigasi
         document.querySelector(".page-nav").style.display =
           role === "admin" ? "flex" : "none";
         if (
@@ -1445,7 +1443,6 @@
             ? "Kelola penugasan bulanan."
             : `Anda hanya dapat melihat jadwal ${group.toUpperCase()}.`;
 
-        // Susun Tabel Kelola
         $("scheduleRows").innerHTML = getMonthScheduleLocal()
           .flatMap((day) => day.sessions.map((s, si) => entryHTML(day, s, si)))
           .join("");
@@ -1463,20 +1460,26 @@
         renderData();
         renderDashboardTable();
 
-        // Susun Catatan Dashboard
-        const published = window.noteCache.published;
-        if (published) {
-          $("dashPublishedNote").innerHTML = `
-            <div class="dash-note-container">
+        // PERUBAHAN: Menampilkan Array Catatan secara berurutan (terbaru di atas)
+        const notesArray = window.noteCache.notes || [];
+        if (notesArray.length > 0) {
+          $("dashPublishedNote").innerHTML = notesArray
+            .slice()
+            .reverse()
+            .map(
+              (n) => `
+            <div class="dash-note-container" style="margin-bottom: 12px;">
                 <div class="dash-note-icon">!</div>
                 <div class="dash-note-content">
-                    <div class="dash-note-text">${published.replace(/\n/g, "<br>")}</div>
+                    <div class="dash-note-text">${n.text.replace(/\n/g, "<br>")}</div>
                     <div class="dash-note-meta">
-                        <span class="dash-note-time">${window.noteCache.published_ts}</span>
-                        ${role === "admin" ? `<div class="dash-note-actions"><button onclick="editNote()">Edit</button><button onclick="deleteNote()">Hapus</button></div>` : ""}
+                        <span class="dash-note-time">${n.ts}</span>
+                        ${role === "admin" ? `<div class="dash-note-actions"><button onclick="editNote(${n.id})">Edit</button><button onclick="deleteNote(${n.id})">Hapus</button></div>` : ""}
                     </div>
                 </div>
-            </div>`;
+            </div>`,
+            )
+            .join("");
         } else {
           $("dashPublishedNote").innerHTML =
             `<div style="color:var(--muted); font-size:13px;">Belum ada catatan yang diterbitkan admin.</div>`;
@@ -1493,7 +1496,6 @@
           const active = !window.inactiveCache.has(i);
           const nim = nims[group][i];
 
-          // Menggunakan sistem pemanggilan gambar offline (NIM.jpg) dan Fallback Avatar[cite: 5]
           html += `<div class="student-card" style="${active ? "" : "opacity: 0.6; filter: grayscale(1);"}">
             ${
               role === "admin"
@@ -1636,7 +1638,7 @@
         return `<tr><td class="monthly-date">${formatDate(d)}<small>KAMIS</small></td><td class="monthly-time">Dzuhur · ${s[1]}</td><td>${assignmentControl(day, s, si, "TAUSIAH", 4)}</td></tr>`;
       }
 
-      // 9. Aksi Database Interaktif (Didaftarkan ke Window)
+      // 9. Aksi Database Interaktif
       window.changeAssignment = async (date, si, type, value) => {
         const day = getMonthScheduleLocal().find((d) => d.date === date);
         if (!day) return;
@@ -1680,14 +1682,12 @@
           ? window.inactiveCache.add(index)
           : window.inactiveCache.delete(index);
 
-        // Simpan status nonaktif ke Firestore
         await setDoc(
           doc(window.db, "status_mahasiswa", group),
           { inactive: [...window.inactiveCache] },
           { merge: true },
         );
 
-        // Jika dinonaktifkan, hapus nama dari jadwal bulan berjalan (dan simpan ke Firestore)
         if (wasActive) {
           Object.keys(window.monthCache)
             .filter((k) => k.startsWith(`${group}-`))
@@ -1703,12 +1703,14 @@
         renderUI();
       };
 
+      // PERUBAHAN: Fungsi Add Note untuk menumpuk catatan baru
       window.addNote = async () => {
         const note = $("monthNote").value.trim();
         if (!note) {
           alert("Isi catatan dulu!");
           return;
         }
+
         const now = new Date();
         const ts =
           formatDate(now, { day: "2-digit", month: "short", year: "numeric" }) +
@@ -1718,20 +1720,33 @@
           String(now.getMinutes()).padStart(2, "0") +
           " WIB";
 
+        // Buat objek catatan dengan ID khusus menggunakan waktu saat ini
+        const newNoteObj = { id: Date.now(), text: note, ts: ts };
+
+        window.noteCache.notes = window.noteCache.notes || [];
+        window.noteCache.notes.push(newNoteObj); // Tambahkan ke daftar
+
         await setDoc(
           doc(window.db, "catatan_jadwal", group),
-          { published: note, published_ts: ts },
+          { notes: window.noteCache.notes },
           { merge: true },
         );
-        window.noteCache = { published: note, published_ts: ts };
+
         $("monthNote").value = "";
         alert("Catatan Online Diterbitkan!");
         renderUI();
       };
 
-      window.editNote = async () => {
-        const current = window.noteCache.published;
+      // PERUBAHAN: Edit berdasarkan ID
+      window.editNote = async (noteId) => {
+        const targetIndex = window.noteCache.notes.findIndex(
+          (n) => n.id === noteId,
+        );
+        if (targetIndex === -1) return;
+
+        const current = window.noteCache.notes[targetIndex].text;
         const newNote = window.prompt("Edit catatan:", current);
+
         if (newNote !== null && newNote.trim() !== "") {
           const now = new Date();
           const ts =
@@ -1740,24 +1755,31 @@
               month: "short",
               year: "numeric",
             }) + " (Diedit)";
+
+          window.noteCache.notes[targetIndex].text = newNote.trim();
+          window.noteCache.notes[targetIndex].ts = ts;
+
           await setDoc(
             doc(window.db, "catatan_jadwal", group),
-            { published: newNote.trim(), published_ts: ts },
+            { notes: window.noteCache.notes },
             { merge: true },
           );
-          window.noteCache = { published: newNote.trim(), published_ts: ts };
           renderUI();
         }
       };
 
-      window.deleteNote = async () => {
+      // PERUBAHAN: Hapus berdasarkan ID
+      window.deleteNote = async (noteId) => {
         if (confirm("Hapus catatan ini?")) {
+          window.noteCache.notes = window.noteCache.notes.filter(
+            (n) => n.id !== noteId,
+          );
+
           await setDoc(
             doc(window.db, "catatan_jadwal", group),
-            { published: "", published_ts: "" },
+            { notes: window.noteCache.notes },
             { merge: true },
           );
-          window.noteCache = { published: "", published_ts: "" };
           renderUI();
         }
       };
@@ -1780,7 +1802,7 @@
         await loadDataAndRenderUI();
       };
 
-      // Countdown Waktu Sholat (Logika tidak berubah)
+      // Countdown Waktu Sholat
       function updateCountdown() {
         const now = new Date();
         const utc = now.getTime() + now.getTimezoneOffset() * 60000;
