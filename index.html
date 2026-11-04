@@ -1568,8 +1568,8 @@
           >
             <option value="admin_ikhwan">Admin Ikhwan</option>
             <option value="admin_akhwat">Admin Akhwat</option>
-            <option value="user_ikhwan">User Ikhwan (Viewer)</option>
-            <option value="user_akhwat">User Akhwat (Viewer)</option>
+            <option value="user_ikhwan">User Ikhwan</option>
+            <option value="user_akhwat">User Akhwat</option>
           </select>
           <input
             type="password"
@@ -1841,7 +1841,30 @@
       </footer>
     </div>
 
-    <script>
+    <script type="module">
+      // 1. PANGGIL FIREBASE (HARUS PALING ATAS)
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import {
+        getFirestore,
+        doc,
+        getDoc,
+        setDoc,
+        onSnapshot,
+      } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+      // 2. PASTE FIREBASE CONFIG ANDA DI SINI
+      const firebaseConfig = {
+        apiKey: "AIzaSyDRm_Q4ECqxfFeEzkkfhSunImp36jRrus4",
+        authDomain: "ukm-almanar.firebaseapp.com",
+        projectId: "ukm-almanar",
+        storageBucket: "ukm-almanar.firebasestorage.app",
+        messagingSenderId: "943949560633",
+        appId: "1:943949560633:web:6eee3e2373508d8a44c6e8",
+      };
+
+      // 3. INISIALISASI DATABASE
+      const app = initializeApp(firebaseConfig);
+      window.db = getFirestore(app);
       // Mocking alert & confirm for preview
       window.alert = function (msg) {
         const dialog = document.createElement("div");
