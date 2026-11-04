@@ -811,6 +811,8 @@
               cursor: pointer;
             "
           >
+            <option value="admin_stit">Admin STIT</option>
+            <!-- Opsi Baru -->
             <option value="admin_ikhwan">Admin Ikhwan</option>
             <option value="admin_akhwat">Admin Akhwat</option>
             <option value="user_ikhwan">User Ikhwan</option>
@@ -1319,8 +1321,9 @@
         const akses = $("loginAkses").value;
         const pass = $("loginPass").value;
         let valid = false;
-
-        if (akses === "admin_ikhwan" && pass === "Ikhwan@*stit") valid = true;
+        if (akses === "admin_stit" && pass === "stitalwafi26") valid = true;
+        else if (akses === "admin_ikhwan" && pass === "Ikhwan@*stit")
+          valid = true;
         else if (akses === "admin_akhwat" && pass === "Akhwat_stitalwafi")
           valid = true;
         else if (akses === "user_ikhwan" && pass === "@*stit") valid = true;
