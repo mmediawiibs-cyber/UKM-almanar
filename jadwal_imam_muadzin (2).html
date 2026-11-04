@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jadwal Imam & Muadzin — STIT Al Wafi Bogor</title>
+<style>
+:root{--navy:#011f3f;--navy2:#123d68;--gold:#c79d3a;--ink:#142b45;--muted:#718096;--line:#e5eaf0;--bg:#f3f6fa;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink)}
+header{background:linear-gradient(115deg,#061b35,#123d68);color:#fff;padding:24px max(18px,calc((100% - 1320px)/2)) 66px}
+.brand{display:flex;align-items:center;gap:15px}.logo{width:52px;height:52px;border:2px solid var(--gold);border-radius:14px;display:grid;place-items:center;color:var(--gold);font-size:27px}.brand h1{font-size:23px;margin:0}.brand small{display:block;color:#d4dfeb;margin-top:5px}
+.wrap{max-width:1320px;margin:-42px auto 30px;padding:0 20px;position:relative}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;background:#ffffffed;backdrop-filter:blur(12px);padding:15px 18px;border-radius:17px;box-shadow:0 8px 28px #0b254018;flex-wrap:wrap}
+.rolebox{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}select,button{font:inherit}select{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;color:var(--navy);font-weight:650}
+main{margin-top:18px}.intro{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:22px 2px 15px}.eyebrow{font-size:11px;letter-spacing:1.4px;color:var(--gold);font-weight:800}.intro h2{margin:5px 0 0;font-size:27px;color:var(--navy)}.intro p{margin:5px 0 0;color:var(--muted);font-size:13px}
+.tabs{display:flex;gap:8px;margin:16px 0}.tab{border:1px solid #dbe3ec;background:white;color:var(--navy);padding:11px 18px;border-radius:12px;font-weight:750;cursor:pointer}.tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}.tab:disabled{opacity:.4;cursor:not-allowed}
+.panel{background:white;border-radius:19px;padding:20px;box-shadow:0 7px 24px #0b254012;border:1px solid #edf0f4}
+.panelhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:15px;border-bottom:1px solid var(--line)}.panelhead h3{margin:0;color:var(--navy);font-size:19px}.weeknav{display:flex;align-items:center;gap:8px}.weeknav button,.editbtn{border:1px solid #dce4ed;background:#fff;color:var(--navy);border-radius:9px;padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer}.weeknav button:hover,.editbtn:hover{border-color:var(--gold);background:#fffaf0}
+.weeklabel{font-size:13px;font-weight:700;color:var(--navy);min-width:155px;text-align:center}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}.stat{background:#f5f7fa;border:1px solid #e9edf2;border-radius:13px;padding:13px 15px}.stat small{display:block;color:var(--muted);font-size:11px}.stat b{display:block;color:var(--navy);font-size:19px;margin-top:5px}
+.day{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:13px 0}.dayhead{background:#f3f6fa;padding:12px 15px;display:flex;justify-content:space-between;gap:10px;color:var(--navy);font-size:13px;font-weight:800}.dayhead span{color:var(--muted);font-weight:500}
+.entry{display:grid;grid-template-columns:155px 1fr 1fr auto;gap:13px;align-items:center;padding:14px 15px;border-top:1px solid var(--line)}
+.prayer{background:var(--navy);color:#fff;border-radius:11px;padding:13px;display:flex;justify-content:space-between;gap:8px;font-size:13px;font-weight:750}.prayer span:last-child{color:#f5dfad;white-space:nowrap}
+.person{display:flex;align-items:center;gap:10px;min-width:0}.avatar{width:42px;height:42px;flex:none;border-radius:50%;display:grid;place-items:center;background:#e8edf3;color:var(--navy);font-weight:800;font-size:13px}.person b{font-size:13px;line-height:1.3}.rolelabel{font-size:10px;letter-spacing:.7px;color:var(--muted);display:block;margin-bottom:3px}
+.person select{width:100%;min-width:0;font-size:12px;padding:8px}
+.notice{padding:12px 14px;border-radius:12px;background:#fff8e9;border:1px solid #f0dfb8;color:#74551b;font-size:12px;line-height:1.5;margin-top:14px}
+.hidden{display:none!important}footer{text-align:center;color:#8793a2;font-size:11px;padding:18px}
+@media(max-width:760px){header{padding:20px 16px 60px}.wrap{padding:0 12px}.entry{grid-template-columns:1fr 1fr;gap:10px;padding:12px}.prayer{grid-column:1/-1}.entry .editbtn{grid-column:1/-1}.intro h2{font-size:22px}.panel{padding:13px}.stats{gap:7px}.stat{padding:10px}.stat b{font-size:16px}.stat small{font-size:10px}.weeklabel{min-width:120px;font-size:11px}.weeknav button{padding:8px;font-size:11px}}
+:root{--navy:#0a192f;--navy2:#1e3a8a;--gold:#d4af37;--ink:#142b45;--muted:#718096;--line:#e2e8f0;--bg:#f4f7fb;--white:#fff}
+body{background:radial-gradient(ellipse at 12% 0%,#e8edf7 0,transparent 38%),var(--bg);font-family:Inter,"Segoe UI",Arial,sans-serif;color:var(--ink)}
+header{background:linear-gradient(135deg,#0a192f 0%,#172a45 62%,#1e3a8a 100%);padding:24px max(18px,calc((100% - 1320px)/2)) 66px;border-bottom:1px solid #d4af3760;position:relative;overflow:hidden}
+header:after{content:"";position:absolute;width:310px;height:310px;border-radius:50%;right:7%;top:-235px;background:#d4af3726;filter:blur(12px);pointer-events:none}
+.brand{position:relative;z-index:1;gap:14px}.logo{width:52px;height:52px;border:1px solid #d4af3790;border-radius:16px;display:grid;place-items:center;background:#ffffff14;box-shadow:0 8px 24px #02081740;padding:7px}.logo img{width:100%;height:100%;object-fit:contain}.brand h1{font-size:21px;letter-spacing:-.35px}.brand small{color:#cbd5e1;font-size:12px;letter-spacing:.2px}
+.wrap{max-width:1320px;margin:-42px auto 30px;padding:0 20px;position:relative}.toolbar{background:#ffffffdf;border:1px solid #ffffff;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:15px 18px;border-radius:20px;box-shadow:0 16px 42px #0f172a12}.eyebrow{font-size:10px;letter-spacing:1.5px;color:#aa8010;font-weight:850}.rolebox{color:#64748b;font-size:12px;font-weight:600}select{border:1px solid #d8e0ea;border-radius:12px;padding:10px 12px;background:#fff;color:var(--navy);font-weight:650;box-shadow:0 2px 8px #0f172a08}
+main{margin-top:22px}.intro{margin:22px 2px 18px}.intro h2{font-size:29px;letter-spacing:-.7px}.intro p{font-size:13px}.tabs{gap:9px;margin:17px 0}.tab{border:1px solid #dce3ed;background:#fff;color:var(--navy);padding:11px 18px;border-radius:13px;font-weight:750;box-shadow:0 3px 10px #0f172a08;transition:.18s}.tab:hover:not(:disabled){transform:translateY(-1px);border-color:#d4af37}.tab.active{background:linear-gradient(135deg,#0a192f,#1e3a8a);color:#fff;border-color:#172a45;box-shadow:0 8px 18px #0a192f24}.panel{background:#ffffffeb;border-radius:22px;padding:22px;box-shadow:0 16px 42px #0f172a0d;border:1px solid #fff;backdrop-filter:blur(14px)}.panelhead{padding-bottom:16px}.panelhead h3{font-size:19px;letter-spacing:-.3px}.weeknav button,.editbtn{border:1px solid #dbe2eb;background:#fff;border-radius:11px;padding:9px 13px;transition:.18s}.weeknav button:hover,.editbtn:hover{border-color:var(--gold);background:#fffaf0;transform:translateY(-1px)}.weeklabel{font-size:12px}.stats{gap:13px;margin:18px 0}.stat{background:linear-gradient(145deg,#f8fafc,#f1f5f9);border:1px solid #e8edf3;border-radius:15px;padding:15px 16px}.stat small{font-size:11px}.stat b{font-size:20px;margin-top:6px}.day{border:1px solid #e5eaf0;border-radius:16px;margin:14px 0;box-shadow:0 3px 12px #0f172a05}.dayhead{background:linear-gradient(90deg,#f1f5f9,#f8fafc);padding:13px 16px;font-size:12px;letter-spacing:.4px}.entry{gap:14px;padding:15px 16px}.prayer{background:linear-gradient(135deg,#0a192f,#1e3a8a);border-radius:12px;padding:13px 14px;box-shadow:0 5px 12px #0a192f18}.prayer span:last-child{color:#f3e5ab}.avatar{background:#f3e5ab;color:#0a192f;border:1px solid #ead38a}.person b{font-size:13px}.person select{box-shadow:none}.rolelabel{font-size:9px;letter-spacing:.9px}.notice{padding:13px 15px;border-radius:13px;background:#fffbeb;border:1px solid #f1dfaa;color:#735619;font-size:12px}footer{color:#8793a2;font-size:11px;padding:20px}
+@media(max-width:760px){header{padding:20px 16px 60px}.wrap{padding:0 12px}.intro h2{font-size:23px}.panel{padding:14px;border-radius:18px}.stats{gap:7px}.stat{padding:11px 10px;border-radius:12px}.entry{grid-template-columns:1fr 1fr;gap:10px;padding:12px}.prayer{grid-column:1/-1}.weeknav{gap:5px}.weeknav button{padding:8px 9px}.dayhead{padding:11px 12px}}
+.logo{width:48px;height:48px;border:0;border-radius:0;background:transparent;box-shadow:none;padding:0}.logo img{width:100%;height:100%;object-fit:contain}
+.workspace-grid{display:grid;grid-template-columns:minmax(275px,330px) minmax(0,1fr);gap:16px;align-items:start}.assignment-panel,.schedule-panel{min-width:0}.assignment-panel{padding:17px}.assignment-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:13px}.assignment-head h3{margin:0;color:var(--navy);font-size:16px}.assignment-head p{margin:5px 0 0;color:var(--muted);font-size:11px;line-height:1.4}.reset-btn{flex:none;border:1px solid #fecaca;border-radius:10px;padding:8px 10px;background:#fff7f7;color:#b42332;font-size:11px;font-weight:800;cursor:pointer}.reset-btn:hover{background:#fee2e2}.table-wrap{overflow:auto}.assignment-table{width:100%;border-collapse:separate;border-spacing:0;font-size:11px}.assignment-table th{position:sticky;top:0;background:#f3f6fa;color:#53647a;text-align:left;font-size:10px;letter-spacing:.4px;padding:10px 8px;border-bottom:1px solid var(--line);z-index:1}.assignment-table td{vertical-align:top;padding:9px 8px;border-bottom:1px solid #edf0f4}.assignment-table th:first-child,.assignment-table td:first-child{min-width:120px}.assignment-table td:first-child{font-weight:750;color:var(--navy);line-height:1.45}.assignment-chip{display:block;margin:0 0 5px;padding:4px 6px;border-radius:7px;background:#eef3f9;color:#344b68;font-size:9px;line-height:1.35;white-space:nowrap}.assignment-empty{color:#9aa6b5;font-size:10px}.schedule-panel{padding:20px}.schedule-panel .entry{grid-template-columns:140px minmax(0,1fr) minmax(0,1fr)}
+body[data-group="akhwat"]{--navy:#4f46a5;--navy2:#7c3aed;--gold:#c4b5fd;--line:#e5e0f3;--bg:#f7f5ff}body[data-group="akhwat"] header{background:linear-gradient(120deg,#233b89 0%,#4f46e5 53%,#9333ea 100%);border-color:#c4b5fd66}body[data-group="akhwat"] header:after{background:#e9d5ff42}body[data-group="akhwat"] .tab.active,body[data-group="akhwat"] .prayer{background:linear-gradient(120deg,#3156b8 0%,#5b4de2 55%,#9333ea 100%);border-color:#6554d8}body[data-group="akhwat"] .avatar{background:#ede9fe;color:#5b45b6;border-color:#d8ccff}body[data-group="akhwat"] .dayhead{background:linear-gradient(90deg,#f0edff,#faf8ff)}body[data-group="akhwat"] .assignment-chip{background:#f0edff;color:#51418c}
+@media(max-width:1000px){.workspace-grid{grid-template-columns:1fr}.table-wrap{max-height:300px}}@media(max-width:760px){.workspace-grid{gap:12px}.assignment-panel,.schedule-panel{padding:13px}.schedule-panel .entry{grid-template-columns:1fr 1fr}.assignment-head{align-items:center}}
+.workspace-grid{grid-template-columns:minmax(260px,300px) minmax(0,1fr);gap:14px}.schedule-panel{padding:16px}.month-table-wrap{min-height:250px}.monthly-table{width:100%;min-width:700px;border-collapse:separate;border-spacing:0;font-size:11px}.monthly-table th{position:sticky;top:0;z-index:2;text-align:left;background:#f3f6fa;color:#53647a;padding:9px 8px;font-size:10px;letter-spacing:.4px;border-bottom:1px solid var(--line)}.monthly-table td{padding:5px 7px;border-bottom:1px solid #edf0f4;vertical-align:middle}.monthly-table tbody tr:hover{background:#fafbfd}.monthly-date{font-weight:800;color:var(--navy);white-space:nowrap}.monthly-date small{display:block;color:var(--muted);font-size:9px;font-weight:600;margin-top:2px}.monthly-time{white-space:nowrap;font-weight:750;color:var(--navy)}.monthly-person{width:100%;min-width:155px;padding:7px 9px!important;border-radius:9px!important;font-size:10px!important}.month-note{border-top:1px solid var(--line);margin-top:14px;padding-top:13px;display:grid;gap:7px}.month-note label{font-size:12px;font-weight:800;color:var(--navy)}.month-note textarea{resize:vertical;width:100%;min-height:65px;border:1px solid #dbe2eb;border-radius:10px;padding:10px 11px;font:inherit;font-size:12px;line-height:1.5;color:var(--ink);background:#fff}.month-note textarea:focus{outline:2px solid #c4b5fd;outline-offset:1px}.month-note small{font-size:10px;color:var(--muted)}body[data-group="akhwat"] .monthly-table th{background:#f3f0ff}body[data-group="akhwat"] .monthly-table tbody tr:hover{background:#fbfaff}body[data-group="akhwat"] .month-note textarea:focus{outline-color:#a78bfa}
+@media(max-width:1000px){.workspace-grid{grid-template-columns:1fr}.monthly-table{min-width:680px}}@media(max-width:760px){.schedule-panel{padding:12px}.monthly-table th,.monthly-table td{padding:5px}.monthly-person{min-width:145px}.weeklabel{min-width:145px}}
+.tabs{width:min(100%,375px)}.tabs .tab{flex:1;white-space:nowrap}.workspace-grid{grid-template-columns:minmax(260px,300px) minmax(0,1fr)}.assignment-panel{width:100%}.assignment-table th:first-child,.assignment-table td:first-child{min-width:95px}.assignment-table th:nth-child(2),.assignment-table td:nth-child(2){min-width:105px}.assignment-table th:last-child,.assignment-table td:last-child{min-width:76px}.assignment-table td.inactive-name{color:#9aa6b5;text-decoration:line-through}.student-toggle{border:1px solid #dbe2eb;border-radius:7px;background:#fff;padding:5px 6px;color:#52647b;font-size:9px;font-weight:750;cursor:pointer;white-space:nowrap}.student-toggle[data-active="false"]{border-color:#bbf7d0;background:#f0fdf4;color:#15803d}.monthly-table{min-width:830px}.monthly-table th:last-child,.monthly-table td:last-child{min-width:130px}.monthly-note-placeholder{color:#9aa6b5}.note-actions{display:flex;align-items:center;justify-content:space-between;gap:10px}.publish-note-btn{border:0;border-radius:9px;padding:9px 14px;background:linear-gradient(120deg,#0a192f,#1e3a8a);color:white;font-size:11px;font-weight:800;cursor:pointer}.published-note{padding:10px 12px;margin:0 0 10px;border:1px solid #f1dfaa;border-radius:10px;background:#fffbeb;color:#735619;font-size:11px;line-height:1.5}.published-note p{margin:4px 0 0;white-space:pre-wrap}.published-note.hidden{display:none!important}body[data-group="akhwat"] .publish-note-btn{background:linear-gradient(120deg,#3156b8,#5b4de2 55%,#9333ea)}body[data-group="akhwat"] .published-note{background:#faf8ff;border-color:#ddd6fe;color:#51418c}
+.tabs{width:min(100%,375px)}.workspace-grid{grid-template-columns:minmax(0,375px) minmax(0,1fr)}.assignment-panel{width:100%;padding:14px}.assignment-table th,.assignment-table td{padding:7px 4px}.assignment-table th:first-child,.assignment-table td:first-child{min-width:78px}.assignment-table th:nth-child(2),.assignment-table td:nth-child(2){min-width:84px}.assignment-table th:last-child,.assignment-table td:last-child{min-width:65px}.assignment-chip{white-space:normal;overflow-wrap:anywhere;font-size:8px;padding:3px 4px}.schedule-table-block{margin:0 0 12px}.schedule-table-block h4{margin:0;padding:8px 10px;background:#f3f6fa;color:var(--navy);font-size:11px;border:1px solid var(--line);border-bottom:0;border-radius:10px 10px 0 0}.schedule-table-block .month-table-wrap{border:1px solid var(--line);border-radius:0 0 10px 10px}.schedule-table-block .monthly-table{min-width:650px}.tausiah-table{min-width:420px!important}.tausiah-block .month-table-wrap{max-height:240px;min-height:80px}body[data-group="akhwat"] .schedule-table-block h4{background:#f3f0ff}
+.assignment-panel{width:min(100%,375px)}.tabs{width:min(100%,375px)}@media(max-width:1000px){.workspace-grid{grid-template-columns:1fr}}
+.summary-section{margin-top:12px}.summary-section h4{margin:0 0 7px;color:var(--navy);font-size:11px;font-weight:850}
+.workspace-grid{align-items:stretch}.assignment-panel{height:100%;min-height:0;overflow:hidden;display:flex;flex-direction:column}.assignment-panel>.summary-section{height:100%;flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}.assignment-panel>.summary-section .table-wrap{height:100%;max-height:100%;flex:1;min-height:0;overflow-y:auto;overflow-x:hidden}@media(max-width:1000px){.workspace-grid{align-items:start}.assignment-panel{height:calc(100vh - 24px)}.assignment-panel>.summary-section .table-wrap{height:100%;flex:1;min-height:0;max-height:none;overflow-y:auto;overflow-x:hidden}}
+.monthly-person.is-unassigned{background:#fff7ed!important;border-color:#f97316!important;color:#9a3412;font-weight:800;outline:none!important;box-shadow:none!important}.monthly-person.cohort-2025{outline:none!important;box-shadow:none!important;border:1px solid var(--line)!important;}.monthly-person.cohort-2026{outline:none!important;box-shadow:none!important;border:1px solid var(--line)!important;}.monthly-person:focus{outline:none!important;box-shadow:none!important}
+
+/* New Added CSS */
+.schedule-table-block .month-table-wrap { max-height: 500px !important; }
+.summary-section .table-wrap { max-height: 900px !important; }
+
+/* Cohort Dividers */
+.cohort-divider td {
+    background: #eef3f9; color: var(--navy); font-weight: 850; font-size: 10px;
+    text-align: center; letter-spacing: 0.5px; padding: 8px; border-bottom: 1px solid var(--line);
+}
+body[data-group="akhwat"] .cohort-divider td {
+    background: #f0edff; color: #51418c; border-color: #e5e0f3;
+}
+
+/* Page Navigation */
+.page-nav { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 24px; background: white; padding: 8px; border-radius: 14px; box-shadow: 0 4px 16px rgba(11, 37, 64, 0.06); border: 1px solid var(--line); width: 100%; }
+.page-nav button { flex: 1; padding: 12px 16px; border: none; background: transparent; color: var(--muted); font-size: 14px; font-weight: 750; border-radius: 10px; cursor: pointer; white-space: nowrap; transition: 0.2s; text-align: center; }
+.page-nav button:hover { background: #f3f6fa; color: var(--navy); }
+.page-nav button.active { background: var(--navy); color: white; box-shadow: 0 4px 12px rgba(10, 25, 47, 0.2); }
+.page-view { display: none; }
+.page-view.active { display: block; }
+
+/* Dashboard Styles */
+.dashboard-grid { display: flex; flex-direction: column; gap: 20px; }
+.countdown-box { background: linear-gradient(135deg, #0a192f, #1e3a8a); color: white; padding: 24px; border-radius: 20px; text-align: center; box-shadow: 0 10px 30px #0a192f30; position: relative; overflow: hidden; }
+.countdown-box::before { content: ""; position: absolute; width: 200px; height: 200px; background: rgba(255,255,255,0.05); border-radius: 50%; top: -50px; left: -50px; pointer-events: none; }
+.countdown-label { font-size: 12px; font-weight: 700; color: #cbd5e1; letter-spacing: 1px; text-transform: uppercase; }
+.countdown-time { font-size: 48px; font-weight: 800; margin: 10px 0; color: #f3e5ab; font-variant-numeric: tabular-nums; line-height: 1; }
+.countdown-target { font-size: 14px; color: #cbd5e1; }
+body[data-group="akhwat"] .countdown-box { background: linear-gradient(120deg, #3156b8, #5b4de2, #9333ea); box-shadow: 0 10px 30px #5b4de230; }
+
+.dashboard-table-container { background: white; border-radius: 20px; padding: 24px; box-shadow: 0 8px 24px #0b254012; border: 1px solid #edf0f4; }
+.dashboard-table-container h3 { margin: 0 0 16px 0; color: var(--navy); font-size: 18px; }
+.dashboard-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.dashboard-table th { background: #f3f6fa; padding: 12px; text-align: left; color: #53647a; font-size: 11px; letter-spacing: 0.5px; border-bottom: 1px solid var(--line); }
+.dashboard-table td { padding: 12px; border-bottom: 1px solid #edf0f4; color: var(--navy); }
+.dashboard-table tr:last-child td { border-bottom: none; }
+.dashboard-table .date-col { font-weight: 700; }
+.dashboard-table .person-col { font-weight: 600; }
+.inactive-name { color: #9aa6b5; text-decoration: line-through; }
+
+/* Data Mahasiswa Styles */
+.data-container { background: white; border-radius: 20px; padding: 24px; box-shadow: 0 8px 24px #0b254012; border: 1px solid #edf0f4; }
+.data-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-top: 16px; }
+.student-card { padding: 20px 16px; border: 1px solid var(--line); border-radius: 16px; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); aspect-ratio: 4 / 5; position: relative; }
+.student-photo { width: 85px; height: 105px; background: #e2e8f0; border-radius: 12px; margin-bottom: 16px; display: grid; place-items: center; color: #94a3b8; }
+.student-name { font-weight: 750; font-size: 13px; color: var(--navy); margin-bottom: 6px; line-height: 1.3; }
+.student-nim { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+.student-prodi { font-size: 11px; color: var(--muted); margin-bottom: 0; }
+.cohort-divider-grid { grid-column: 1 / -1; background: #eef3f9; color: var(--navy); font-weight: 850; font-size: 11px; text-align: center; letter-spacing: 0.5px; padding: 10px; border-radius: 8px; margin-top: 10px; }
+body[data-group="akhwat"] .cohort-divider-grid { background: #f0edff; color: #51418c; }
+.power-btn { position: absolute; top: 12px; right: 12px; background: #f1f5f9; border: none; border-radius: 50%; width: 30px; height: 30px; display: grid; place-items: center; cursor: pointer; transition: 0.2s; color: #64748b; }
+.power-btn:hover { background: #e2e8f0; color: var(--navy); }
+.power-btn[data-active="true"] { color: #10b981; background: #ecfdf5; }
+.power-btn[data-active="false"] { color: #ef4444; background: #fee2e2; }
+.power-btn[data-active="false"]:hover { background: #fecaca; }
+
+/* Dashboard Note Enhancement */
+.dash-note-container { display: flex; gap: 12px; align-items: flex-start; background: #fffbeb; border: 1px solid #f1dfaa; padding: 16px; border-radius: 12px; }
+.dash-note-icon { background: #f59e0b; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0; }
+.dash-note-content { flex: 1; }
+.dash-note-text { color: #735619; font-size: 13px; line-height: 1.5; margin-bottom: 8px; }
+.dash-note-meta { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.dash-note-time { font-size: 11px; color: #9ca3af; }
+.dash-note-actions button { background: transparent; border: 1px solid #d1d5db; padding: 5px 12px; border-radius: 6px; font-size: 11px; cursor: pointer; color: #4b5563; margin-left: 6px; transition: 0.2s; }
+.dash-note-actions button:hover { background: #f3f4f6; color: var(--navy); }
+</style>
+</head>
+<body>
+
+<!-- Sistem Login Layar Penuh -->
+<div id="loginOverlay" style="position:fixed; inset:0; background:var(--bg); z-index:9999; display:flex; justify-content:center; align-items:center; padding:20px;">
+    <div style="background:white; padding:32px; border-radius:24px; box-shadow:0 12px 40px rgba(11,37,64,0.1); width:100%; max-width:400px; text-align:center;">
+        <div class="logo" style="margin:0 auto 20px;"><img src="logo-stit.png" alt="Logo STIT Al Wafi" /></div>
+        <h2 style="margin:0 0 8px; color:var(--navy); font-size:22px;">Sistem Penjadwalan</h2>
+        <p style="color:var(--muted); font-size:13px; margin:0 0 24px;">Silakan pilih peran dan masuk ke aplikasi.</p>
+        
+        <div style="display:flex; flex-direction:column; gap:16px;">
+            <select id="loginAkses" style="width:100%; padding:14px; border-radius:12px; border:1px solid var(--line); background:#f8fafc; color:var(--navy); font-weight:700; font-size:14px; box-shadow:none; cursor:pointer;">
+                <option value="admin_ikhwan">Admin Ikhwan</option>
+                <option value="admin_akhwat">Admin Akhwat</option>
+                <option value="user_ikhwan">User Ikhwan (Viewer)</option>
+                <option value="user_akhwat">User Akhwat (Viewer)</option>
+            </select>
+            <input type="password" id="loginPass" placeholder="Kata Sandi" style="width:100%; padding:14px; border-radius:12px; border:1px solid var(--line); background:#f8fafc; color:var(--ink); font-family:inherit; font-size:14px;">
+            <button type="button" onclick="doLogin()" style="width:100%; padding:14px; border-radius:12px; background:linear-gradient(135deg,#0a192f,#1e3a8a); color:white; border:none; font-weight:800; font-size:14px; cursor:pointer; margin-top:8px;">Masuk Aplikasi</button>
+        </div>
+    </div>
+</div>
+
+<header><div class="brand" style="cursor:pointer;" onclick="switchPage('page-dashboard')"><div class="logo"><img src="logo-stit.png" alt="Logo STIT Al Wafi" /></div><div><h1>STIT Al Wafi Bogor</h1><small>Sistem Jadwal Imam & Muadzin Mahasiswa</small></div></div></header>
+<div class="wrap">
+ <main>
+  
+  <!-- Container 3: Navigasi Antar Halaman -->
+  <div class="page-nav">
+     <button class="nav-btn active" id="navDash" data-target="page-dashboard">Menu Dashboard</button>
+     <button class="nav-btn" id="navKelola" data-target="page-kelola">Menu Kelola Jadwal</button>
+     <button class="nav-btn" id="navData" data-target="page-data">Menu Data</button>
+  </div>
+
+  <!-- PAGE: DASHBOARD -->
+  <div id="page-dashboard" class="page-view active">
+      <div class="dashboard-grid">
+          <!-- Container 1: Waktu Mundur -->
+          <div class="countdown-box">
+              <div class="countdown-label" id="cdLabel">Menuju Waktu Sholat Berikutnya</div>
+              <div class="countdown-time" id="cdTime">--:--:--</div>
+              <div class="countdown-target" id="cdTarget">Memuat jadwal...</div>
+          </div>
+
+          <!-- Container 2: Jadwal Pekanan -->
+          <div class="dashboard-table-container">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
+                  <h3 id="currentWeekTitle" style="margin:0">Jadwal Pekanan</h3>
+                  <div class="weeknav">
+                      <button onclick="dashWeekOffset--; renderDashboardTable()">‹ Pekan</button>
+                      <span class="weeklabel" id="dashDateRange"></span>
+                      <button onclick="dashWeekOffset++; renderDashboardTable()">Pekan ›</button>
+                  </div>
+              </div>
+              <div style="overflow-x:auto;">
+                  <table class="dashboard-table">
+                      <thead>
+                          <tr><th>HARI & TANGGAL</th><th>WAKTU</th><th>IMAM / PEMATERI</th><th>MUADZIN</th></tr>
+                      </thead>
+                      <tbody id="currentWeekRows">
+                          <!-- Terisi otomatis oleh JS -->
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+
+          <!-- Container 3: Catatan -->
+          <div class="dashboard-table-container">
+              <h3 style="margin:0 0 10px 0; color:var(--navy); font-size:16px;">Catatan Jadwal</h3>
+              <div id="dashPublishedNote" style="color:var(--muted); font-size:13px; line-height:1.6;">Memuat catatan...</div>
+          </div>
+      </div>
+  </div>
+
+  <!-- PAGE: KELOLA JADWAL -->
+  <div id="page-kelola" class="page-view">
+      <div class="intro"><div><div class="eyebrow">MASJID STIT AL WAFI BOGOR</div><h2>Kelola Jadwal Imam & Muadzin</h2><p id="subtitle">Admin dapat melihat dan mengelola jadwal Ikhwan maupun Akhwat.</p></div></div>
+      <div class="workspace-grid">
+       <aside class="panel assignment-panel">
+           <div class="assignment-head"><div><h3>Ringkasan Penugasan</h3><p>Ringkasan jadwal bulanan Imam, Muadzin, dan Tausiah.</p></div><button class="reset-btn" id="resetAssignments" type="button">Reset semua</button></div>
+           <div class="summary-section">
+               <h4>Imam, Muadzin &amp; Tausiah</h4>
+               <div class="table-wrap"><table class="assignment-table"><thead><tr><th>Nama</th><th>Jadwal</th></tr></thead><tbody id="assignmentRows"></tbody></table></div>
+           </div>
+       </aside>
+       <section class="panel schedule-panel">
+       <div class="panelhead"><h3 id="panelTitle">Jadwal Ikhwan</h3><div class="weeknav"><button id="prev">‹ Bulan</button><span class="weeklabel" id="weekLabel"></span><button id="next">Bulan ›</button></div></div>
+       
+       <div id="publishedNote" class="published-note hidden"><b>Catatan untuk jamaah</b><p id="publishedNoteText"></p></div>
+       <div class="schedule-table-block">
+           <h4>Jadwal Imam &amp; Muadzin</h4>
+           <div class="table-wrap month-table-wrap"><table class="monthly-table"><thead><tr><th>Tanggal</th><th>Waktu</th><th>Imam</th><th>Muadzin</th></tr></thead><tbody id="scheduleRows"></tbody></table></div>
+       </div>
+       <div class="schedule-table-block tausiah-block">
+           <h4>Jadwal Tausiah</h4>
+           <div class="table-wrap month-table-wrap"><table class="monthly-table tausiah-table"><thead><tr><th>Tanggal</th><th>Waktu</th><th>Pemateri Tausiah</th></tr></thead><tbody id="tausiahRows"></tbody></table></div>
+       </div>
+       <section class="month-note">
+           <label for="monthNote">Catatan untuk dashboard</label><textarea id="monthNote" rows="3" placeholder="Contoh: Jumat, 13 November — Ahmad berhalangan, digantikan oleh ..."></textarea>
+           <div class="note-actions"><small id="noteStatus">Catatan untuk bulan terpilih.</small><button id="addNote" class="publish-note-btn" type="button">Tambahkan Catatan</button></div>
+       </section>
+       
+      </section>
+      </div>
+  </div>
+
+  <!-- PAGE: DATA MAHASISWA -->
+  <div id="page-data" class="page-view">
+      <div class="data-container">
+          <h3 style="margin-top:0; color:var(--navy);" id="dataTitle">Data Mahasiswa (Ikhwan)</h3>
+          <p style="color:var(--muted); font-size:13px;">Daftar seluruh mahasiswa yang terdaftar dalam sistem penjadwalan.</p>
+          <div id="studentDataGrid" class="data-grid">
+              <!-- Terisi otomatis -->
+          </div>
+      </div>
+  </div>
+
+ </main>
+ <footer>Jadwal bulanan: Kamis, Jumat, dan Sabtu · Dzuhur dan Ashar</footer>
+</div>
+
+<script>
+// Mocking alert & confirm for preview
+window.alert = function(msg) {
+  const dialog = document.createElement('div');
+  dialog.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#b42332;color:#fff;padding:12px 24px;border-radius:8px;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.15);font-size:13px;font-family:sans-serif;font-weight:bold;';
+  dialog.innerText = msg; document.body.appendChild(dialog); setTimeout(() => dialog.remove(), 3500);
+};
+window.confirm = function(msg) { return true; };
+
+const students={
+ ikhwan:["ABDUL QOWI FAWWAZ AL-ATSARI","ABDULLAH IBNUL MUBARAK","AFIF AHMAD MUFLIH EL HASSAN","AHMAD HASSAAN SUGITAHARI","AHMAD ZAID ABDUR ROUF","DRASTHYA RAFA ADHITIAWAN","MUHAMMAD CAESAR ALMAYDA WIRA","MUHAMMAD ERSADY RIVAI","MUHAMMAD LUTFIR AMIN RAHMAN","WINARNOKO","FERDINAN FAWWAZ IMANULLAH","FARRELINO ACHMAD DARIEF","RAFIF MUAFA ADDARUQUTHNI","IHSAN AL MUNIR BL","MUHAMMAD IZZARDA IZHARULHAQ","MUHAMMAD IRSYAD","MUHAMMAD AFFAN","IQBAL ABDUL GHANI","SAEPUL MUNAWAR RIZAL","MUHAMMAD FADHIL IZZAZ DZAKIRAH"],
+ akhwat:["BALQIS ZERLINDA CIPUTRI","INDAH PURNAMA SARI","KHONSA' ABDURROCHMAN","MIFTAH NUR AZIZAH","MUDRIKAH ZAIN","MUTHIA NABILA HUSNA","OCTAVIA ZULKARNAEN","RAYYA RIFKAH FALIHAH","SITI NAMIRA UQBA HASANAH","ALYA LUTFIA MUMTAZ","ANNISA UL KARIMAH","MUFIDAH","NADZMINA AL KHALIFI HUMAIRA","HALIZA SOFIE AMALIA","TALITA HASNA AZIZAH SALSABILA","SHAFA KHALIDA","SYAHIDAH RABIYATUN NISA","LIA APRIYANI","AISYAH","YULI EKA OKTAFIANI"]
+};
+const nims={
+ ikhwan:["252130101001","252130101002","252130101003","252130101004","252130101005","252130101013","252130101026","252130101027","252130101029","252130101038","252130101048","252130101057","26213010203","26213010204","26213010202","26213010207","26213010216","26213010212","26213010215","26213010213"],
+ akhwat:["252130101011","252130101016","252130101021","252130101023","252130101024","252130101031","252130101035","252130101036","252130101037","252130101043","252130101047","252130101050","252130101060","26213010216","26213010211","26213010205","26213010206","26213010209","26213010208","26213010217"]
+};
+const cohortSplit={ikhwan:12,akhwat:13};
+const scheduleTemplate={ikhwan:[{day:"KAMIS",sessions:[["Dzuhur","11:40"],["Ashar","14:55"]]},{day:"JUMAT",sessions:[["Ashar","14:55"]]},{day:"SABTU",sessions:[["Dzuhur","11:40"],["Ashar","14:55"]]}],akhwat:[{day:"KAMIS",sessions:[["Dzuhur","11:40"],["Ashar","14:55"]]},{day:"JUMAT",sessions:[["Ashar","14:55"]]},{day:"SABTU",sessions:[["Dzuhur","11:40"],["Ashar","14:55"]]}]};
+
+let role = "admin";
+let group = "ikhwan";
+let monthOffset=0,dashWeekOffset=0;const $=id=>document.getElementById(id),monthCache={};
+
+// Sistem Autentikasi Sederhana
+function doLogin() {
+    const akses = $("loginAkses").value;
+    const pass = $("loginPass").value;
+    let valid = false;
+    
+    if (akses === "admin_ikhwan") {
+        if (pass === "Ikhwan@*stit") valid = true;
+        else alert("Password Admin Ikhwan salah!");
+    } else if (akses === "admin_akhwat") {
+        if (pass === "Akhwat_stitalwafi") valid = true;
+        else alert("Password Admin Akhwat salah!");
+    } else if (akses === "user_ikhwan") {
+        if (pass === "@*stit") valid = true;
+        else alert("Password User Ikhwan salah!");
+    } else if (akses === "user_akhwat") {
+        if (pass === "stit_alwafi") valid = true;
+        else alert("Password User Akhwat salah!");
+    }
+    
+    if (valid) {
+        if (akses === "admin_ikhwan") { role = "admin"; group = "ikhwan"; }
+        else if (akses === "admin_akhwat") { role = "admin"; group = "akhwat"; }
+        else if (akses === "user_ikhwan") { role = "ikhwan"; group = "ikhwan"; }
+        else if (akses === "user_akhwat") { role = "akhwat"; group = "akhwat"; }
+        
+        $("loginOverlay").style.display = "none";
+        render(); // Merender ulang berdasarkan status login
+    }
+}
+
+// Navigation Logic
+function switchPage(pageId) {
+    document.querySelectorAll(".nav-btn").forEach(b => {
+        b.classList.toggle("active", b.dataset.target === pageId);
+    });
+    document.querySelectorAll(".page-view").forEach(p => {
+        p.classList.toggle("active", p.id === pageId);
+    });
+}
+
+document.querySelectorAll(".nav-btn").forEach(btn => {
+    btn.addEventListener("click", () => switchPage(btn.dataset.target));
+});
+
+function activeMonth(){const d=new Date();d.setDate(1);d.setHours(12,0,0,0);d.setMonth(d.getMonth()+monthOffset);return d}
+function dateKey(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function monthId(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`}
+function formatDate(d,options={day:"numeric",month:"short"}){return new Intl.DateTimeFormat("id-ID",options).format(d)}
+function storageKey(kind,g=group,m=activeMonth()){return `manar-${kind}-${g}-${monthId(m)}`}
+function inactiveSet(g=group){try{return new Set(JSON.parse(localStorage.getItem(`manar-inactive-${g}`)||"[]"))}catch{return new Set()}}
+function mondayKey(date){const d=new Date(date+"T12:00:00");d.setDate(d.getDate()-((d.getDay()+6)%7));return dateKey(d)}
+function buildMonthSchedule(g,m){
+ const days=[],map={4:0,5:1,6:2},total=new Date(m.getFullYear(),m.getMonth()+1,0).getDate(),active=students[g].map((_,i)=>i).filter(i=>!inactiveSet(g).has(i)),weeks={},weekSlots={};
+ for(let n=1;n<=total;n++){const d=new Date(m.getFullYear(),m.getMonth(),n,12),ti=map[d.getDay()];if(ti===undefined)continue;const key=dateKey(d),wk=mondayKey(key);if(weeks[wk]===undefined)weeks[wk]=Object.keys(weeks).length;const templates=scheduleTemplate[g][ti].sessions,offset=active.length?(weeks[wk]*13)%active.length:0;if(weekSlots[wk]===undefined)weekSlots[wk]=0;let slot=weekSlots[wk];const take=()=>slot<active.length?active[(offset+slot++)%active.length]:null;const sessions=templates.map(([name,time],si)=>[name,time,take(),take(),ti===0&&si===0?take():null]);weekSlots[wk]=slot;days.push({date:key,day:scheduleTemplate[g][ti].day,sessions})}
+ return days;
+}
+function getMonthSchedule(g=group,m=activeMonth()){
+ const key=`${g}-${monthId(m)}`;if(!monthCache[key]){try{const saved=localStorage.getItem(storageKey("schedule",g,m));monthCache[key]=saved?JSON.parse(saved):buildMonthSchedule(g,m)}catch{monthCache[key]=buildMonthSchedule(g,m)}
+  const inactive=inactiveSet(g);monthCache[key].forEach(day=>day.sessions.forEach(s=>{while(s.length<5)s.push(null);for(let f=2;f<=4;f++)if(inactive.has(s[f]))s[f]=null}))}
+ return monthCache[key];
+}
+function saveMonthSchedule(g=group,m=activeMonth()){try{localStorage.setItem(storageKey("schedule",g,m),JSON.stringify(getMonthSchedule(g,m)))}catch{}}
+function loadNote(kind="draft"){try{return localStorage.getItem(storageKey(kind))||""}catch{return ""}}
+
+// Render Data Mahasiswa
+function renderData() {
+    $("dataTitle").textContent = `Data Mahasiswa (${group === "ikhwan" ? "Ikhwan" : "Akhwat"})`;
+    let html = '';
+    const inactive = inactiveSet();
+    
+    html += `<div class="cohort-divider-grid">ANGKATAN 2025</div>`;
+    students[group].forEach((name, i) => {
+        if (i === cohortSplit[group]) {
+            html += `<div class="cohort-divider-grid">ANGKATAN 2026</div>`;
+        }
+        const active = !inactive.has(i);
+        const nim = `NIM: ${nims[group][i]}`;
+        const prodi = "Prodi: MPI";
+        
+        html += `<div class="student-card" style="${active ? '' : 'opacity: 0.7; filter: grayscale(0.8);'}">
+            ${role === "admin" ? `
+            <button type="button" class="power-btn" data-active="${active}" onclick="toggleStudent(${i})" title="${active ? 'Nonaktifkan' : 'Aktifkan'}">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
+            </button>
+            ` : `
+            <div style="position: absolute; top: 16px; right: 16px;">
+                <span style="font-size:10px; font-weight:800; color:${active ? '#15803d' : '#b42332'}">${active ? "AKTIF" : "NONAKTIF"}</span>
+            </div>
+            `}
+            <div class="student-photo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
+            <div class="student-name ${active ? '' : 'inactive-name'}">${name}</div>
+            <div class="student-nim">${nim}</div>
+            <div class="student-prodi">${prodi}</div>
+        </div>`;
+    });
+    $("studentDataGrid").innerHTML = html;
+}
+
+// Render Dashboard Current Week Table
+function renderDashboardTable() {
+    $("currentWeekTitle").textContent = `Jadwal Pekanan (${group === "ikhwan" ? "Ikhwan" : "Akhwat"})`;
+    const now = new Date();
+    // Cari hari senin pekan ini
+    const day = now.getDay();
+    const diff = now.getDate() - day + (day === 0 ? -6 : 1) + (dashWeekOffset * 7);
+    const monday = new Date(now.setDate(diff));
+    monday.setHours(12,0,0,0);
+    
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    
+    $("dashDateRange").textContent = `${formatDate(monday, {day:'numeric',month:'short'})} - ${formatDate(sunday, {day:'numeric',month:'short',year:'numeric'})}`;
+    
+    let currentWeekDays = [];
+    const list = students[group];
+    
+    // Tarik jadwal dari Storage / Memory untuk bulan berjalan (atau bulan depan jika menyeberang)
+    // 3=Kamis, 4=Jumat, 5=Sabtu relatif dari Senin
+    [3, 4, 5].forEach(offset => { 
+        let targetDate = new Date(monday);
+        targetDate.setDate(monday.getDate() + offset);
+        
+        let targetMonthSchedule = getMonthSchedule(group, targetDate);
+        let dateStr = dateKey(targetDate);
+        let dayData = targetMonthSchedule.find(d => d.date === dateStr);
+        
+        if(dayData) {
+            let dDate = new Date(dayData.date + "T12:00:00");
+            dayData.sessions.forEach(s => {
+                let isKamisDzuhur = (dayData.day === "KAMIS" && s[0] === "Dzuhur");
+                
+                let imamText = s[2] !== null ? list[s[2]] : "<span style='color:#f43f5e'>Kosong</span>";
+                let muadzinText = s[3] !== null ? list[s[3]] : "<span style='color:#f43f5e'>Kosong</span>";
+                
+                let row = `<tr>
+                    <td class="date-col">${formatDate(dDate)}<br><span style="font-weight:400;color:var(--muted);font-size:10px">${dayData.day}</span></td>
+                    <td>${s[0]}<br><span style="color:var(--muted);font-size:10px">${s[1]}</span></td>
+                    <td class="person-col">${imamText}</td>
+                    <td class="person-col">${muadzinText}</td>
+                </tr>`;
+                currentWeekDays.push(row);
+                
+                // Tambahan khusus Tausiah di hari Kamis Dzuhur
+                if(isKamisDzuhur) {
+                    let tausiahText = s[4] !== null ? list[s[4]] : "<span style='color:#f43f5e'>Kosong</span>";
+                    let rowTausiah = `<tr style="background:#fffbeb">
+                        <td class="date-col">${formatDate(dDate)}<br><span style="font-weight:400;color:#735619;font-size:10px">${dayData.day} (TAUSIAH)</span></td>
+                        <td>Ba'da Dzuhur</td>
+                        <td class="person-col" colspan="2" style="color:#735619">${tausiahText}</td>
+                    </tr>`;
+                    currentWeekDays.push(rowTausiah);
+                }
+            });
+        }
+    });
+
+    if(currentWeekDays.length === 0) {
+        $("currentWeekRows").innerHTML = `<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted)">Belum ada jadwal untuk pekan ini.</td></tr>`;
+    } else {
+        $("currentWeekRows").innerHTML = currentWeekDays.join("");
+    }
+}
+
+
+function render(){
+    const m=activeMonth();
+    document.body.dataset.group=group;
+    
+    // Logika Hak Akses Navigasi Halaman
+    const pageNav = document.querySelector(".page-nav");
+    if (role === "admin") {
+        pageNav.style.display = "flex";
+    } else {
+        pageNav.style.display = "none";
+    }
+    
+    // Paksa kembali ke Dashboard jika user non-admin sedang berada di halaman yang disembunyikan
+    if (role !== "admin" && !$("page-dashboard").classList.contains("active")) {
+        switchPage('page-dashboard');
+    }
+
+    $("resetAssignments").classList.toggle("hidden",role!=="admin");
+    $("panelTitle").textContent="Jadwal "+(group==="ikhwan"?"Ikhwan":"Akhwat");
+    $("weekLabel").textContent=formatDate(m,{month:"long",year:"numeric"});
+    $("subtitle").textContent=role==="admin"?"Kelola penugasan Imam, Muadzin, dan Tausiah untuk bulan terpilih.":role==="ikhwan"?"Anda hanya dapat melihat jadwal Ikhwan.":"Anda hanya dapat melihat jadwal Akhwat.";
+    
+    $("scheduleRows").innerHTML=getMonthSchedule().flatMap(day=>day.sessions.map((s,si)=>entryHTML(day,s,si))).join("");
+    $("tausiahRows").innerHTML=getMonthSchedule().filter(day=>day.day==="KAMIS").map(day=>tausiahHTML(day,day.sessions.findIndex(s=>s[0]==="Dzuhur"))).join("");
+    
+    renderAssignments();
+    renderData();
+    renderDashboardTable();
+
+    $("monthNote").value=loadNote("draft");
+    $("monthNote").disabled=role!=="admin";
+    $("addNote").classList.toggle("hidden",role!=="admin");
+    const published=loadNote("published");
+    const publishedTs=loadNote("published_ts")||"";
+    $("publishedNote").classList.toggle("hidden",!published||role==="admin");
+    $("publishedNoteText").textContent=published;
+    $("noteStatus").textContent=published?"Catatan terakhir sudah diterbitkan.":"Catatan tersimpan sebagai draft pada browser ini.";
+    
+    if (published) {
+        $("dashPublishedNote").innerHTML = `
+            <div class="dash-note-container">
+                <div class="dash-note-icon">!</div>
+                <div class="dash-note-content">
+                    <div class="dash-note-text">${published.replace(/\n/g, '<br>')}</div>
+                    <div class="dash-note-meta">
+                        <span class="dash-note-time">${publishedTs}</span>
+                        ${role === 'admin' ? `
+                        <div class="dash-note-actions">
+                            <button onclick="editNote()">Edit</button>
+                            <button onclick="deleteNote()">Hapus</button>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+    } else {
+        $("dashPublishedNote").innerHTML = `<div style="color:var(--muted); font-size:13px; line-height:1.6;">Belum ada catatan yang diterbitkan.</div>`;
+    }
+}
+
+function renderAssignments(){
+ const list=students[group],inactive=inactiveSet(),rows=list.map((name,index)=>({name,index,slots:[],active:!inactive.has(index)}));
+ getMonthSchedule().forEach(day=>day.sessions.forEach(s=>{
+  const when=formatDate(new Date(day.date+"T12:00:00"));
+  if(s[2]!==null&&s[2]!==undefined)rows[s[2]].slots.push(`${when} ${s[0]} · Imam`);
+  if(s[3]!==null&&s[3]!==undefined)rows[s[3]].slots.push(`${when} ${s[0]} · Muadzin`);
+  if(s[4]!==null&&s[4]!==undefined)rows[s[4]].slots.push(`${when} · Tausiah`);
+ }));
+ 
+ let tableHTML = `<tr class="cohort-divider"><td colspan="2">ANGKATAN 2025</td></tr>`;
+ rows.forEach((row, i) => {
+  if (i === cohortSplit[group]) {
+   tableHTML += `<tr class="cohort-divider"><td colspan="2">ANGKATAN 2026</td></tr>`;
+  }
+  tableHTML += `<tr><td class="${row.active?"":"inactive-name"}">${row.name}</td><td>${row.slots.length?row.slots.map(slot=>`<span class="assignment-chip">${slot}</span>`).join(""):`<span class="assignment-empty">Belum bertugas</span>`}</td></tr>`;
+ });
+ $("assignmentRows").innerHTML = tableHTML;
+}
+
+function assignmentControl(day,s,si,type,field){const list=students[group],date=day.date,value=s[field];if(role!=="admin")return `<span>${value===null?"—":list[value]}</span>`;const inactive=inactiveSet(),cohortClass=value===null?"is-unassigned":value<cohortSplit[group]?"cohort-2025":"cohort-2026",options=[2025,2026].map((year,gi)=>`<optgroup label="Tahun Ajaran ${year}">${list.map((name,index)=>({name,index})).filter(x=>(gi===0?x.index<cohortSplit[group]:x.index>=cohortSplit[group])&&!inactive.has(x.index)).map(({name,index})=>`<option value="${index}" ${index===value?"selected":""}>${name}</option>`).join("")}</optgroup>`).join("");return `<select class="monthly-person ${cohortClass}" aria-label="${type}" onchange="changeAssignment('${date}',${si},'${type}',this.value)"><option value="" ${value===null?"selected":""}>Pilih nama</option>${options}</select>`}
+
+function entryHTML(day,s,si){const d=new Date(day.date+"T12:00:00");return `<tr><td class="monthly-date">${formatDate(d)}<small>${day.day}</small></td><td class="monthly-time">${s[0]} · ${s[1]}</td><td>${assignmentControl(day,s,si,"IMAM",2)}</td><td>${assignmentControl(day,s,si,"MUADZIN",3)}</td></tr>`}
+function tausiahHTML(day,si){const s=day.sessions[si],d=new Date(day.date+"T12:00:00");return `<tr><td class="monthly-date">${formatDate(d)}<small>KAMIS</small></td><td class="monthly-time">Dzuhur · ${s[1]}</td><td>${assignmentControl(day,s,si,"TAUSIAH",4)}</td></tr>`}
+window.changeAssignment=(date,si,type,value)=>{const day=getMonthSchedule().find(d=>d.date===date);if(!day)return;const s=day.sessions[si],field={IMAM:2,MUADZIN:3,TAUSIAH:4}[type],idx=value===""?null:Number(value);if(idx!==null&&inactiveSet().has(idx)){alert("Mahasiswa ini sedang nonaktif.");render();return}s[field]=idx;saveMonthSchedule();render()};
+window.toggleStudent=index=>{const set=inactiveSet(),wasActive=!set.has(index);if(wasActive&&!confirm(`Nonaktifkan ${students[group][index]}? Penugasan yang tersimpan akan dikosongkan.`))return;wasActive?set.add(index):set.delete(index);try{localStorage.setItem(`manar-inactive-${group}`,JSON.stringify([...set]))}catch{}if(wasActive){const prefix=`manar-schedule-${group}-`;try{for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(!key||!key.startsWith(prefix))continue;const days=JSON.parse(localStorage.getItem(key));days.forEach(d=>d.sessions.forEach(s=>{while(s.length<5)s.push(null);for(let f=2;f<=4;f++)if(s[f]===index)s[f]=null}));localStorage.setItem(key,JSON.stringify(days))}}catch{}Object.keys(monthCache).filter(k=>k.startsWith(`${group}-`)).forEach(k=>monthCache[k].forEach(d=>d.sessions.forEach(s=>{for(let f=2;f<=4;f++)if(s[f]===index)s[f]=null})));}render()};
+
+$("prev").onclick=()=>{monthOffset--;render()};$("next").onclick=()=>{monthOffset++;render()};
+$("resetAssignments").addEventListener("click",()=>{if(!confirm("Hapus semua penugasan pada bulan dan kelompok ini?"))return;getMonthSchedule().forEach(day=>day.sessions.forEach(s=>{s[2]=null;s[3]=null;s[4]=null}));saveMonthSchedule();render()});
+
+$("monthNote").addEventListener("input",e=>{try{localStorage.setItem(storageKey("draft"),e.target.value);$("noteStatus").textContent="Draft tersimpan pada browser ini."}catch{$("noteStatus").textContent="Draft belum dapat disimpan."}});
+$("addNote").addEventListener("click",()=>{
+    const note=$("monthNote").value.trim();
+    if(!note){alert("Tulis catatan terlebih dahulu.");return}
+    try{
+        localStorage.setItem(storageKey("published"),note);
+        const now = new Date();
+        const ts = formatDate(now, {day:'2-digit', month:'short', year:'numeric'}) + ", " + String(now.getHours()).padStart(2,'0') + ":" + String(now.getMinutes()).padStart(2,'0') + " WIB";
+        localStorage.setItem(storageKey("published_ts"), ts);
+        
+        $("monthNote").value = "";
+        localStorage.setItem(storageKey("draft"), "");
+        
+        render();
+        if(role==="admin")$("noteStatus").textContent="Catatan diterbitkan pada dashboard tampilan pengguna bulan ini.";
+    }catch{
+        $("noteStatus").textContent="Catatan gagal disimpan pada browser ini.";
+    }
+});
+
+// Note Edit and Delete Actions
+window.editNote = () => {
+    if(role !== 'admin') return;
+    const currentNote = loadNote("published");
+    const newNote = window.prompt("Edit catatan:", currentNote);
+    if (newNote !== null && newNote.trim() !== "") {
+        localStorage.setItem(storageKey("published"), newNote.trim());
+        render();
+    }
+};
+
+window.deleteNote = () => {
+    if(role !== 'admin') return;
+    if(confirm("Hapus catatan ini?")) {
+        localStorage.removeItem(storageKey("published"));
+        localStorage.removeItem(storageKey("published_ts"));
+        render();
+    }
+};
+
+// Countdown Logic WIB (UTC+7)
+function updateCountdown() {
+    // Get current time in WIB
+    const now = new Date();
+    const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+    const wibTime = new Date(utc + (3600000 * 7));
+    
+    const day = wibTime.getDay(); // 0 Sun, 1 Mon, ... 4 Thu, 5 Fri, 6 Sat
+    const h = wibTime.getHours();
+    const m = wibTime.getMinutes();
+    const s = wibTime.getSeconds();
+    
+    // Current time in minutes since 00:00
+    const currentMins = h * 60 + m;
+    
+    // Target Times: Dzuhur(11:40 -> 700), Ashar(14:55 -> 895)
+    const targetDzuhur = 11 * 60 + 40;
+    const targetAshar = 14 * 60 + 55;
+    
+    let targetDay = day;
+    let targetMins = 0;
+    let targetName = "";
+    let dayName = "";
+
+    // Determine the next target
+    if (day === 4) { // Kamis
+        if (currentMins < targetDzuhur) { targetMins = targetDzuhur; targetName = "Dzuhur (11:40 WIB)"; dayName = "Kamis"; }
+        else if (currentMins < targetAshar) { targetMins = targetAshar; targetName = "Ashar (14:55 WIB)"; dayName = "Kamis"; }
+        else { targetDay = 5; targetMins = targetAshar; targetName = "Ashar (14:55 WIB)"; dayName = "Jumat"; } // Jumat no Dzuhur
+    } else if (day === 5) { // Jumat
+        if (currentMins < targetAshar) { targetMins = targetAshar; targetName = "Ashar (14:55 WIB)"; dayName = "Jumat"; }
+        else { targetDay = 6; targetMins = targetDzuhur; targetName = "Dzuhur (11:40 WIB)"; dayName = "Sabtu"; }
+    } else if (day === 6) { // Sabtu
+        if (currentMins < targetDzuhur) { targetMins = targetDzuhur; targetName = "Dzuhur (11:40 WIB)"; dayName = "Sabtu"; }
+        else if (currentMins < targetAshar) { targetMins = targetAshar; targetName = "Ashar (14:55 WIB)"; dayName = "Sabtu"; }
+        else { targetDay = 4; targetMins = targetDzuhur; targetName = "Dzuhur (11:40 WIB)"; dayName = "Kamis"; } // Next week Kamis
+    } else { // Sun, Mon, Tue, Wed
+        targetDay = 4; targetMins = targetDzuhur; targetName = "Dzuhur (11:40 WIB)"; dayName = "Kamis";
+    }
+
+    // Calculate time difference
+    let daysToAdd = targetDay - day;
+    if (daysToAdd < 0) daysToAdd += 7;
+    
+    let targetDate = new Date(wibTime);
+    targetDate.setDate(targetDate.getDate() + daysToAdd);
+    targetDate.setHours(Math.floor(targetMins / 60), targetMins % 60, 0, 0);
+    
+    let diff = targetDate.getTime() - wibTime.getTime();
+    
+    let hh = Math.floor(diff / (1000 * 60 * 60));
+    let mm = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    let ss = Math.floor((diff % (1000 * 60)) / 1000);
+
+    $("cdTime").textContent = `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}:${String(ss).padStart(2, '0')}`;
+    $("cdTarget").textContent = `${dayName}, ${targetName}`;
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
+render();
+</script>
+</body></html>
