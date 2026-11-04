@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Jadwal Imam & Muadzin — STIT Al Wafi Bogor</title>
     <style>
-      /* --- (CSS SAMA SEPERTI SEBELUMNYA) --- */
       :root {
         --navy: #011f3f;
         --navy2: #123d68;
@@ -29,6 +28,8 @@
           sans-serif;
         color: var(--ink);
       }
+
+      /* --- PEMBARUAN HEADER, LOGO, DAN TOMBOL LOGOUT --- */
       header {
         background: linear-gradient(
           135deg,
@@ -41,6 +42,11 @@
         position: relative;
         overflow: hidden;
         color: #fff;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 15px;
       }
       header:after {
         content: "";
@@ -59,31 +65,58 @@
         z-index: 1;
         display: flex;
         align-items: center;
-        gap: 14px;
+        gap: 16px;
       }
       .logo {
-        width: 48px;
-        height: 48px;
-        display: grid;
-        place-items: center;
+        height: 56px;
+        width: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       .logo img {
-        width: 100%;
         height: 100%;
+        width: auto;
         object-fit: contain;
       }
+      .brand-text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
       .brand h1 {
-        font-size: 21px;
+        font-size: 22px;
         letter-spacing: -0.35px;
         margin: 0;
+        line-height: 1.1;
       }
       .brand small {
         color: #cbd5e1;
-        font-size: 12px;
+        font-size: 13px;
         letter-spacing: 0.2px;
         display: block;
         margin-top: 5px;
       }
+      .logout-btn {
+        position: relative;
+        z-index: 2;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 9px 16px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 750;
+        cursor: pointer;
+        transition: 0.2s;
+        backdrop-filter: blur(4px);
+      }
+      .logout-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.4);
+      }
+      /* -------------------------------------------------- */
+
       .wrap {
         max-width: 1320px;
         margin: -42px auto 30px;
@@ -733,7 +766,7 @@
           text-align: center;
         "
       >
-        <div class="logo" style="margin: 0 auto 20px">
+        <div class="logo" style="margin: 0 auto 20px; height: 70px">
           <img src="logo-stit.png" alt="Logo STIT Al Wafi" />
         </div>
         <h2 style="margin: 0 0 8px; color: var(--navy); font-size: 22px">
@@ -836,6 +869,7 @@
       }
     </style>
 
+    <!-- PEMBARUAN HEADER HTML -->
     <header>
       <div
         class="brand"
@@ -845,11 +879,12 @@
         <div class="logo">
           <img src="logo-stit.png" alt="Logo STIT Al Wafi" />
         </div>
-        <div>
+        <div class="brand-text">
           <h1>STIT Al Wafi Bogor</h1>
           <small>Sistem Jadwal Imam & Muadzin Mahasiswa</small>
         </div>
       </div>
+      <button class="logout-btn" onclick="doLogout()">Logout Akses</button>
     </header>
 
     <div class="wrap">
@@ -1061,7 +1096,6 @@
     </div>
 
     <!-- SCRIPT UTAMA BERBASIS FIREBASE -->
-    <!-- SCRIPT UTAMA BERBASIS FIREBASE -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
       import {
@@ -1234,7 +1268,6 @@
 
       window.monthCache = {};
       window.inactiveCache = new Set();
-      // PERUBAHAN: Cache catatan sekarang berbentuk Array
       window.noteCache = { notes: [] };
 
       // 4. Utils
@@ -1260,7 +1293,7 @@
         return dateKey(d);
       }
 
-      // 5. Autentikasi
+      // 5. Autentikasi (DIPERBARUI DENGAN SISTEM SESSION)
       window.doLogin = async () => {
         const akses = $("loginAkses").value;
         const pass = $("loginPass").value;
@@ -1280,10 +1313,26 @@
             : akses.replace("user_", "");
           group = akses.includes("akhwat") ? "akhwat" : "ikhwan";
 
+          // Simpan sesi ke browser agar tidak perlu login ulang saat refresh
+          localStorage.setItem(
+            "manar_session",
+            JSON.stringify({ role, group }),
+          );
+
           $("loginOverlay").style.display = "none";
           $("loginPass").value = "";
 
           await loadDataAndRenderUI();
+        }
+      };
+
+      // FUNGSI LOGOUT
+      window.doLogout = () => {
+        if (confirm("Apakah Anda yakin ingin keluar dari aplikasi?")) {
+          localStorage.removeItem("manar_session");
+          $("loginOverlay").style.display = "flex";
+          window.monthCache = {};
+          window.noteCache = { notes: [] };
         }
       };
 
@@ -1375,7 +1424,6 @@
             ? new Set(statusSnap.data().inactive || [])
             : new Set();
 
-          // PERUBAHAN: Tarik array catatan
           const noteSnap = await getDoc(
             doc(window.db, "catatan_jadwal", group),
           );
@@ -1460,7 +1508,6 @@
         renderData();
         renderDashboardTable();
 
-        // PERUBAHAN: Menampilkan Array Catatan secara berurutan (terbaru di atas)
         const notesArray = window.noteCache.notes || [];
         if (notesArray.length > 0) {
           $("dashPublishedNote").innerHTML = notesArray
@@ -1703,7 +1750,6 @@
         renderUI();
       };
 
-      // PERUBAHAN: Fungsi Add Note untuk menumpuk catatan baru
       window.addNote = async () => {
         const note = $("monthNote").value.trim();
         if (!note) {
@@ -1720,11 +1766,10 @@
           String(now.getMinutes()).padStart(2, "0") +
           " WIB";
 
-        // Buat objek catatan dengan ID khusus menggunakan waktu saat ini
         const newNoteObj = { id: Date.now(), text: note, ts: ts };
 
         window.noteCache.notes = window.noteCache.notes || [];
-        window.noteCache.notes.push(newNoteObj); // Tambahkan ke daftar
+        window.noteCache.notes.push(newNoteObj);
 
         await setDoc(
           doc(window.db, "catatan_jadwal", group),
@@ -1737,7 +1782,6 @@
         renderUI();
       };
 
-      // PERUBAHAN: Edit berdasarkan ID
       window.editNote = async (noteId) => {
         const targetIndex = window.noteCache.notes.findIndex(
           (n) => n.id === noteId,
@@ -1768,7 +1812,6 @@
         }
       };
 
-      // PERUBAHAN: Hapus berdasarkan ID
       window.deleteNote = async (noteId) => {
         if (confirm("Hapus catatan ini?")) {
           window.noteCache.notes = window.noteCache.notes.filter(
@@ -1882,6 +1925,16 @@
       }
       setInterval(updateCountdown, 1000);
       updateCountdown();
+
+      // CEK OTOMATIS SAAT HALAMAN DIMUAT (REFRESH)
+      const savedSession = localStorage.getItem("manar_session");
+      if (savedSession) {
+        const session = JSON.parse(savedSession);
+        role = session.role;
+        group = session.group;
+        $("loginOverlay").style.display = "none"; // Lewati form login
+        loadDataAndRenderUI(); // Langsung muat data dari Firebase
+      }
     </script>
   </body>
 </html>
