@@ -339,6 +339,7 @@
       }
       .assignment-table {
         width: 100%;
+        min-width: 400px; /* Tambahkan baris ini */
         border-collapse: separate;
         border-spacing: 0;
         font-size: 11px;
@@ -438,7 +439,7 @@
       }
       .monthly-table {
         width: 100%;
-        min-width: 700px;
+        min-width: 600px;
         border-collapse: separate;
         border-spacing: 0;
         font-size: 11px;
@@ -609,6 +610,9 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
         aspect-ratio: 4 / 5;
         position: relative;
+        /* Tambahkan dua baris ini untuk membatasi pelebaran di HP */
+        max-width: 250px;
+        margin: 0 auto; /* Supaya posisinya selalu rata tengah jika layarnya luas */
       }
       .student-photo {
         width: 85px;
@@ -733,9 +737,26 @@
         }
         .panel {
           padding: 14px;
+          overflow: hidden; /* Mencegah elemen keluar batas */
         }
+
+        /* Memberikan scroll horizontal khusus untuk tabel di HP */
+        .table-wrap,
+        .month-table-wrap {
+          overflow-x: auto; /* Aktifkan scroll geser ke samping */
+          -webkit-overflow-scrolling: touch; /* Biar scroll-nya mulus di HP */
+          width: 100%;
+        }
+
+        /* Penyesuaian agar form pilihan nama tidak terlalu panjang */
+        .monthly-person {
+          min-width: 120px;
+        }
+
+        /* Tabel di layar HP akan dikunci minimum lebarnya, 
+           sisanya bisa di-scroll oleh user */
         .monthly-table {
-          min-width: 680px;
+          min-width: 550px;
         }
       }
     </style>
@@ -1845,83 +1866,79 @@
         await loadDataAndRenderUI();
       };
 
-      // Countdown Waktu Sholat
+      // Countdown Waktu Sholat Global (5 Waktu Setiap Hari)
       function updateCountdown() {
         const now = new Date();
+        // Konversi ke WIB (UTC+7)
         const utc = now.getTime() + now.getTimezoneOffset() * 60000;
         const wibTime = new Date(utc + 3600000 * 7);
-        const day = wibTime.getDay(),
-          h = wibTime.getHours(),
-          m = wibTime.getMinutes();
-        const currentMins = h * 60 + m;
-        const targetDzuhur = 11 * 60 + 40,
-          targetAshar = 14 * 60 + 55;
-        let targetDay = day,
-          targetMins = 0,
-          targetName = "",
-          dayName = "";
 
-        if (day === 4) {
-          if (currentMins < targetDzuhur) {
-            targetMins = targetDzuhur;
-            targetName = "Dzuhur";
-            dayName = "Kamis";
-          } else if (currentMins < targetAshar) {
-            targetMins = targetAshar;
-            targetName = "Ashar";
-            dayName = "Kamis";
-          } else {
-            targetDay = 5;
-            targetMins = targetAshar;
-            targetName = "Ashar";
-            dayName = "Jumat";
+        const h = wibTime.getHours();
+        const m = wibTime.getMinutes();
+        const currentMins = h * 60 + m; // Total menit dari jam 00:00
+
+        // Estimasi statis 5 Waktu Sholat Global untuk wilayah Bogor/Depok
+        const times = [
+          { name: "Subuh", mins: 4 * 60 + 30, timeStr: "04:30" },
+          { name: "Dzuhur", mins: 11 * 60 + 40, timeStr: "11:40" }, // Mengikuti jadwal Anda
+          { name: "Ashar", mins: 14 * 60 + 55, timeStr: "14:55" }, // Mengikuti jadwal Anda
+          { name: "Maghrib", mins: 17 * 60 + 50, timeStr: "17:50" },
+          { name: "Isya", mins: 19 * 60 + 0, timeStr: "19:00" },
+        ];
+
+        let targetMins = 0;
+        let targetName = "";
+        let targetTimeStr = "";
+        let isTomorrow = false;
+
+        // 1. Cari sholat terdekat di HARI INI
+        for (let i = 0; i < times.length; i++) {
+          if (currentMins < times[i].mins) {
+            targetMins = times[i].mins;
+            targetName = times[i].name;
+            targetTimeStr = times[i].timeStr;
+            break;
           }
-        } else if (day === 5) {
-          if (currentMins < targetAshar) {
-            targetMins = targetAshar;
-            targetName = "Ashar";
-            dayName = "Jumat";
-          } else {
-            targetDay = 6;
-            targetMins = targetDzuhur;
-            targetName = "Dzuhur";
-            dayName = "Sabtu";
-          }
-        } else if (day === 6) {
-          if (currentMins < targetDzuhur) {
-            targetMins = targetDzuhur;
-            targetName = "Dzuhur";
-            dayName = "Sabtu";
-          } else if (currentMins < targetAshar) {
-            targetMins = targetAshar;
-            targetName = "Ashar";
-            dayName = "Sabtu";
-          } else {
-            targetDay = 4;
-            targetMins = targetDzuhur;
-            targetName = "Dzuhur";
-            dayName = "Kamis";
-          }
-        } else {
-          targetDay = 4;
-          targetMins = targetDzuhur;
-          targetName = "Dzuhur";
-          dayName = "Kamis";
         }
 
-        let daysToAdd = targetDay - day;
-        if (daysToAdd < 0) daysToAdd += 7;
+        // 2. Jika saat ini sudah melewati Isya, maka targetnya adalah SUBUH ESOK HARI
+        if (targetName === "") {
+          targetMins = times[0].mins;
+          targetName = times[0].name;
+          targetTimeStr = times[0].timeStr;
+          isTomorrow = true;
+        }
+
+        // 3. Kalkulasi selisih waktu
         let targetDate = new Date(wibTime);
-        targetDate.setDate(targetDate.getDate() + daysToAdd);
+        if (isTomorrow) {
+          targetDate.setDate(targetDate.getDate() + 1);
+        }
         targetDate.setHours(Math.floor(targetMins / 60), targetMins % 60, 0, 0);
+
         let diff = targetDate.getTime() - wibTime.getTime();
 
-        let hh = Math.floor(diff / 3600000),
-          mm = Math.floor((diff % 3600000) / 60000),
-          ss = Math.floor((diff % 60000) / 1000);
+        let hh = Math.floor(diff / 3600000);
+        let mm = Math.floor((diff % 3600000) / 60000);
+        let ss = Math.floor((diff % 60000) / 1000);
+
         $("cdTime").textContent =
           `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
-        $("cdTarget").textContent = `${dayName}, ${targetName}`;
+
+        // Konversi nama hari ke bahasa Indonesia
+        const hariIndo = [
+          "Minggu",
+          "Senin",
+          "Selasa",
+          "Rabu",
+          "Kamis",
+          "Jumat",
+          "Sabtu",
+        ];
+        let targetHari = hariIndo[targetDate.getDay()];
+
+        $("cdTarget").textContent =
+          `${targetHari}, ${targetName} (${targetTimeStr} WIB)`;
       }
       setInterval(updateCountdown, 1000);
       updateCountdown();
