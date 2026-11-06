@@ -14,6 +14,9 @@
         --line: #e5eaf0;
         --bg: #f3f6fa;
         --white: #fff;
+        --group-section-bg: #011f3f;
+        --group-section-text: #ffffff;
+        --group-section-border: #011f3f;
       }
       * {
         box-sizing: border-box;
@@ -271,9 +274,57 @@
         font-weight: 600;
       }
 
+      .dashboard-toolbar-right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .dashboard-export-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+      .dashboard-export-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        border: 1px solid #d9e2ec;
+        border-radius: 9px;
+        padding: 9px 12px;
+        background: #fff;
+        color: var(--navy);
+        font-size: 11px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: 0.2s ease;
+        white-space: nowrap;
+      }
+      .dashboard-export-btn:hover {
+        border-color: var(--gold);
+        background: #fffaf0;
+        transform: translateY(-1px);
+      }
+      .dashboard-export-btn.primary {
+        background: var(--navy);
+        border-color: var(--navy);
+        color: #fff;
+      }
+      .dashboard-export-btn.primary:hover {
+        background: var(--navy2);
+        border-color: var(--navy2);
+      }
+      .dashboard-export-btn:disabled {
+        opacity: 0.65;
+        cursor: wait;
+        transform: none;
+      }
+
       .workspace-grid {
         display: grid;
-        grid-template-columns: minmax(275px, 330px) minmax(0, 1fr);
+        grid-template-columns: minmax(320px, 370px) minmax(0, 1fr);
         gap: 16px;
         align-items: stretch;
       }
@@ -307,17 +358,6 @@
         font-size: 11px;
         line-height: 1.4;
       }
-      .reset-btn {
-        flex: none;
-        border: 1px solid #fecaca;
-        border-radius: 10px;
-        padding: 8px 10px;
-        background: #fff7f7;
-        color: #b42332;
-        font-size: 11px;
-        font-weight: 800;
-        cursor: pointer;
-      }
       .summary-section {
         margin-top: 12px;
         display: flex;
@@ -333,16 +373,35 @@
         font-weight: 850;
       }
       .table-wrap {
-        overflow: auto;
+        width: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
         max-height: 900px;
         flex: 1;
       }
       .assignment-table {
         width: 100%;
-        min-width: 400px; /* Tambahkan baris ini */
+        min-width: 0;
+        table-layout: fixed;
         border-collapse: separate;
         border-spacing: 0;
         font-size: 11px;
+      }
+      .assignment-table th:first-child,
+      .assignment-table td:first-child {
+        width: 34%;
+      }
+      .assignment-table th:last-child,
+      .assignment-table td:last-child {
+        width: 66%;
+      }
+      .assignment-table td:first-child {
+        overflow-wrap: anywhere;
+        word-break: normal;
+      }
+      .assignment-table td:last-child {
+        overflow-wrap: anywhere;
+        min-width: 0;
       }
       .assignment-table th {
         position: sticky;
@@ -366,12 +425,70 @@
       }
       .assignment-chip {
         display: block;
+        width: 100%;
         margin: 0 0 5px;
         padding: 4px 6px;
         border-radius: 7px;
         background: #eef3f9;
         color: #344b68;
         font-size: 9px;
+        line-height: 1.35;
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+      .assignment-empty {
+        display: block;
+        color: var(--muted);
+        font-size: 9px;
+        line-height: 1.35;
+        white-space: normal;
+      }
+      .schedule-month-tools {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 10px;
+        margin: 12px 0 14px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #f8fafc;
+      }
+      .schedule-month-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+        width: 100%;
+      }
+      .schedule-month-actions button {
+        border: 1px solid #dce4ed;
+        border-radius: 9px;
+        padding: 10px 13px;
+        font-size: 11px;
+        font-weight: 800;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .schedule-month-actions button:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+      .clear-month-btn {
+        background: #fff7f7;
+        border-color: #fecaca !important;
+        color: #b42332;
+      }
+      .clear-month-btn:hover {
+        background: #feecec;
+      }
+      .random-month-btn {
+        background: var(--navy);
+        border-color: var(--navy) !important;
+        color: white;
+      }
+      .random-month-btn:hover {
+        filter: brightness(1.12);
       }
 
       .schedule-panel {
@@ -424,10 +541,10 @@
       .schedule-table-block h4 {
         margin: 0;
         padding: 8px 10px;
-        background: #f3f6fa;
-        color: var(--navy);
+        background: var(--group-section-bg);
+        color: var(--group-section-text);
         font-size: 11px;
-        border: 1px solid var(--line);
+        border: 1px solid var(--group-section-border);
         border-bottom: 0;
         border-radius: 10px 10px 0 0;
       }
@@ -498,13 +615,13 @@
         color: #9a3412;
       }
       .cohort-divider td {
-        background: #eef3f9;
-        color: var(--navy);
+        background: var(--group-section-bg);
+        color: #ffffff !important;
         font-weight: 850;
         font-size: 10px;
         text-align: center;
         padding: 8px;
-        border-bottom: 1px solid var(--line);
+        border-bottom: 1px solid var(--group-section-border);
       }
 
       .month-note {
@@ -642,12 +759,13 @@
       }
       .cohort-divider-grid {
         grid-column: 1 / -1;
-        background: #eef3f9;
-        color: var(--navy);
+        background: var(--group-section-bg);
+        color: var(--group-section-text);
         font-weight: 850;
         font-size: 11px;
         text-align: center;
         padding: 10px;
+        border: 1px solid var(--group-section-border);
         border-radius: 8px;
         margin-top: 10px;
       }
@@ -685,6 +803,9 @@
         --gold: #c4b5fd;
         --line: #e5e0f3;
         --bg: #f7f5ff;
+        --group-section-bg: linear-gradient(110deg, #673fe7 0%, #8d35ea 100%);
+        --group-section-text: #ffffff;
+        --group-section-border: #8d35ea;
       }
       body[data-group="akhwat"] header {
         background: linear-gradient(
@@ -700,14 +821,12 @@
       body[data-group="akhwat"] .publish-note-btn {
         background: linear-gradient(120deg, #3156b8, #5b4de2 55%, #9333ea);
       }
-      body[data-group="akhwat"] .cohort-divider td {
-        background: #f0edff;
-        color: #51418c;
-        border-color: #e5e0f3;
-      }
-      body[data-group="akhwat"] .cohort-divider-grid {
-        background: #f0edff;
-        color: #51418c;
+      body[data-group="akhwat"] .cohort-divider td,
+      body[data-group="akhwat"] .cohort-divider-grid,
+      body[data-group="akhwat"] .schedule-table-block h4 {
+        background: var(--group-section-bg);
+        color: var(--group-section-text);
+        border-color: var(--group-section-border);
       }
 
       .hidden {
@@ -729,6 +848,33 @@
         }
       }
       @media (max-width: 760px) {
+        .schedule-month-tools {
+          padding: 10px;
+        }
+        .schedule-month-actions {
+          justify-content: stretch;
+        }
+        .schedule-month-actions button {
+          flex: 1 1 140px;
+        }
+        .assignment-table {
+          font-size: 10px;
+        }
+        .assignment-table td {
+          padding: 7px 5px;
+        }
+        .assignment-table th:first-child,
+        .assignment-table td:first-child {
+          width: 31%;
+        }
+        .assignment-table th:last-child,
+        .assignment-table td:last-child {
+          width: 69%;
+        }
+        .assignment-chip {
+          font-size: 8.5px;
+          padding: 4px 5px;
+        }
         header {
           padding: 20px 16px 60px;
         }
@@ -958,10 +1104,34 @@
                 "
               >
                 <h3 id="currentWeekTitle" style="margin: 0">Jadwal Pekanan</h3>
-                <div class="weeknav">
-                  <button onclick="prevDashWeek()">‹ Pekan</button>
-                  <span class="weeklabel" id="dashDateRange"></span>
-                  <button onclick="nextDashWeek()">Pekan ›</button>
+                <div class="dashboard-toolbar-right">
+                  <div class="weeknav">
+                    <button onclick="prevDashWeek()">‹ Pekan</button>
+                    <span class="weeklabel" id="dashDateRange"></span>
+                    <button onclick="nextDashWeek()">Pekan ›</button>
+                  </div>
+                  <div
+                    id="dashboardExportActions"
+                    class="dashboard-export-actions hidden"
+                  >
+                    <button
+                      type="button"
+                      class="dashboard-export-btn"
+                      onclick="printDashboardSchedule()"
+                      title="Cetak atau simpan jadwal sebagai PDF"
+                    >
+                      <span aria-hidden="true">▤</span> Cetak PDF
+                    </button>
+                    <button
+                      type="button"
+                      id="btnDownloadScheduleImage"
+                      class="dashboard-export-btn primary"
+                      onclick="downloadDashboardScheduleImage()"
+                      title="Unduh jadwal sebagai gambar PNG"
+                    >
+                      <span aria-hidden="true">▧</span> Unduh Gambar
+                    </button>
+                  </div>
                 </div>
               </div>
               <div style="overflow-x: auto">
@@ -1008,14 +1178,6 @@
                   <h3>Ringkasan Penugasan</h3>
                   <p>Ringkasan jadwal bulanan Imam, Muadzin, dan Tausiah.</p>
                 </div>
-                <button
-                  class="reset-btn"
-                  id="resetAssignments"
-                  type="button"
-                  onclick="resetAssignments()"
-                >
-                  Reset semua
-                </button>
               </div>
               <div class="summary-section">
                 <h4>Imam, Muadzin &amp; Tausiah</h4>
@@ -1039,6 +1201,27 @@
                   <button id="prev" onclick="prevMonth()">‹ Bulan</button>
                   <span class="weeklabel" id="weekLabel"></span>
                   <button id="next" onclick="nextMonth()">Bulan ›</button>
+                </div>
+              </div>
+
+              <div class="schedule-month-tools" id="scheduleMonthTools">
+                <div class="schedule-month-actions">
+                  <button
+                    type="button"
+                    class="clear-month-btn"
+                    id="clearActiveMonthBtn"
+                    onclick="clearActiveMonthSchedule()"
+                  >
+                    Hapus Jadwal Sebulan
+                  </button>
+                  <button
+                    type="button"
+                    class="random-month-btn"
+                    id="randomActiveMonthBtn"
+                    onclick="randomizeActiveMonthSchedule()"
+                  >
+                    Acak Imam &amp; Muadzin Sebulan
+                  </button>
                 </div>
               </div>
 
@@ -1127,6 +1310,8 @@
         doc,
         getDoc,
         setDoc,
+        writeBatch,
+        onSnapshot,
       } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
       // 1. Konfigurasi Firebase
@@ -1294,6 +1479,50 @@
       window.inactiveCache = new Set();
       window.noteCache = { notes: [] };
 
+      // Listener realtime Firestore. Perubahan dari Admin akan diterima
+      // otomatis oleh browser User/Admin lain tanpa perlu refresh halaman.
+      const realtimeUnsubscribers = new Map();
+
+      function stopRealtimeListeners() {
+        realtimeUnsubscribers.forEach((unsubscribe) => {
+          try {
+            unsubscribe();
+          } catch (error) {
+            console.warn("Gagal menghentikan listener:", error);
+          }
+        });
+        realtimeUnsubscribers.clear();
+      }
+
+      function renderAfterRealtimeUpdate() {
+        const loginOverlay = $("loginOverlay");
+        if (loginOverlay && loginOverlay.style.display === "none") {
+          renderUI();
+        }
+      }
+
+      function subscribeRealtimeDocument(key, documentRef, onData) {
+        if (realtimeUnsubscribers.has(key)) return;
+        const unsubscribe = onSnapshot(
+          documentRef,
+          (snapshot) => {
+            try {
+              onData(snapshot);
+              renderAfterRealtimeUpdate();
+            } catch (error) {
+              console.error("Gagal memproses pembaruan realtime:", key, error);
+            }
+          },
+          (error) => {
+            console.error("Realtime Firestore error:", key, error);
+            alert(
+              `Pembaruan realtime gagal (${error.code || "unknown"}). Periksa koneksi dan Firestore Rules.`,
+            );
+          },
+        );
+        realtimeUnsubscribers.set(key, unsubscribe);
+      }
+
       // 4. Utils
       function activeMonth() {
         const d = new Date();
@@ -1355,8 +1584,10 @@
       window.doLogout = () => {
         if (confirm("Apakah Anda yakin ingin keluar dari aplikasi?")) {
           localStorage.removeItem("manar_session");
+          stopRealtimeListeners();
           $("loginOverlay").style.display = "flex";
           window.monthCache = {};
+          window.inactiveCache = new Set();
           window.noteCache = { notes: [] };
         }
       };
@@ -1487,18 +1718,117 @@
         }));
       }
 
-      async function fetchMonthData(g, m) {
+      async function fetchMonthData(g, m, forceRefresh = false) {
         const key = `${g}-${monthId(m)}`;
-        if (!window.monthCache[key]) {
+        if (forceRefresh || !window.monthCache[key]) {
           const snap = await getDoc(
             doc(window.db, "jadwal_bulanan", `${g}_${monthId(m)}`),
           );
-          if (snap.exists()) {
+          if (snap.exists() && Array.isArray(snap.data().jadwal)) {
             window.monthCache[key] = normalizeMonthSchedule(snap.data().jadwal);
           } else {
             window.monthCache[key] = buildMonthSchedule(g, m);
           }
         }
+      }
+
+      // Dengarkan bulan yang sedang dibuka serta bulan yang memuat jadwal
+      // Kamis/Jumat/Sabtu pada dashboard pekan terpilih.
+      function getRealtimeMonthTargets() {
+        const targets = new Map();
+        const addMonth = (date) =>
+          targets.set(
+            monthId(date),
+            new Date(date.getFullYear(), date.getMonth(), 1, 12),
+          );
+        addMonth(activeMonth());
+
+        const now = new Date();
+        const day = now.getDay();
+        const diff =
+          now.getDate() - day + (day === 0 ? -6 : 1) + dashWeekOffset * 7;
+        const monday = new Date(now);
+        monday.setDate(diff);
+        monday.setHours(12, 0, 0, 0);
+        [3, 4, 5].forEach((offset) => {
+          const targetDate = new Date(monday);
+          targetDate.setDate(monday.getDate() + offset);
+          addMonth(targetDate);
+        });
+
+        return targets;
+      }
+
+      function syncRealtimeListeners() {
+        const desiredKeys = new Set();
+        const currentGroup = group;
+
+        // Status mahasiswa dan catatan juga disinkronkan realtime.
+        const statusKey = `status:${currentGroup}`;
+        const notesKey = `notes:${currentGroup}`;
+        desiredKeys.add(statusKey);
+        desiredKeys.add(notesKey);
+
+        // Listener bulan aktif dan bulan dashboard.
+        const monthTargets = getRealtimeMonthTargets();
+        monthTargets.forEach((monthDate, month) => {
+          const listenerKey = `schedule:${currentGroup}:${month}`;
+          desiredKeys.add(listenerKey);
+        });
+
+        // Hentikan listener lama yang tidak lagi diperlukan.
+        realtimeUnsubscribers.forEach((unsubscribe, key) => {
+          if (!desiredKeys.has(key)) {
+            try {
+              unsubscribe();
+            } catch (error) {
+              console.warn(error);
+            }
+            realtimeUnsubscribers.delete(key);
+          }
+        });
+
+        subscribeRealtimeDocument(
+          statusKey,
+          doc(window.db, "status_mahasiswa", currentGroup),
+          (snapshot) => {
+            window.inactiveCache = snapshot.exists()
+              ? new Set(snapshot.data().inactive || [])
+              : new Set();
+          },
+        );
+
+        subscribeRealtimeDocument(
+          notesKey,
+          doc(window.db, "catatan_jadwal", currentGroup),
+          (snapshot) => {
+            window.noteCache =
+              snapshot.exists() && Array.isArray(snapshot.data().notes)
+                ? snapshot.data()
+                : { notes: [] };
+          },
+        );
+
+        monthTargets.forEach((monthDate, month) => {
+          const cacheKey = `${currentGroup}-${month}`;
+          const listenerKey = `schedule:${currentGroup}:${month}`;
+          subscribeRealtimeDocument(
+            listenerKey,
+            doc(window.db, "jadwal_bulanan", `${currentGroup}_${month}`),
+            (snapshot) => {
+              if (snapshot.exists() && Array.isArray(snapshot.data().jadwal)) {
+                window.monthCache[cacheKey] = normalizeMonthSchedule(
+                  snapshot.data().jadwal,
+                );
+              } else {
+                window.monthCache[cacheKey] = buildMonthSchedule(
+                  currentGroup,
+                  monthDate,
+                );
+              }
+            },
+          );
+        });
       }
 
       // Menyimpan jadwal ke Firestore.
@@ -1550,7 +1880,7 @@
               ? noteSnap.data()
               : { notes: [] };
 
-          await fetchMonthData(group, activeMonth());
+          await fetchMonthData(group, activeMonth(), true);
 
           const now = new Date();
           const day = now.getDay();
@@ -1562,16 +1892,20 @@
           await fetchMonthData(
             group,
             new Date(new Date(monday).setDate(monday.getDate() + 3)),
+            true,
           );
           await fetchMonthData(
             group,
             new Date(new Date(monday).setDate(monday.getDate() + 4)),
+            true,
           );
           await fetchMonthData(
             group,
             new Date(new Date(monday).setDate(monday.getDate() + 5)),
+            true,
           );
 
+          syncRealtimeListeners();
           renderUI();
         } catch (e) {
           console.error(e);
@@ -1584,6 +1918,257 @@
         return window.monthCache[`${g}-${monthId(m)}`] || [];
       }
 
+      function renderMonthTools(schedule) {
+        const tools = $("scheduleMonthTools");
+        const clearButton = $("clearActiveMonthBtn");
+        const randomButton = $("randomActiveMonthBtn");
+        if (!tools || !clearButton || !randomButton) return;
+
+        tools.classList.toggle("hidden", role !== "admin");
+        const hasSchedule = Array.isArray(schedule) && schedule.length > 0;
+        clearButton.disabled = role !== "admin" || !hasSchedule;
+        randomButton.disabled = role !== "admin" || !hasSchedule;
+      }
+
+      async function saveScheduleMonths(monthIds) {
+        try {
+          const batch = writeBatch(window.db);
+          monthIds.forEach((month) => {
+            const schedule = window.monthCache[`${group}-${month}`];
+            if (!Array.isArray(schedule)) {
+              throw new Error(`Data jadwal bulan ${month} tidak ditemukan.`);
+            }
+            batch.set(
+              doc(window.db, "jadwal_bulanan", `${group}_${month}`),
+              { jadwal: serializeMonthSchedule(schedule) },
+              { merge: true },
+            );
+          });
+          await batch.commit();
+          return true;
+        } catch (error) {
+          console.error("Gagal menyimpan perubahan jadwal bulanan:", error);
+          const code = error && error.code ? error.code : "unknown";
+          const message =
+            error && error.message ? error.message : String(error);
+          alert(
+            `Gagal menyimpan perubahan jadwal.\nKode: ${code}\nPesan: ${message}`,
+          );
+          return false;
+        }
+      }
+
+      window.clearActiveMonthSchedule = async () => {
+        if (role !== "admin") return;
+
+        const monthDate = activeMonth();
+        const month = monthId(monthDate);
+        try {
+          await fetchMonthData(group, monthDate, true);
+        } catch (error) {
+          console.error("Gagal memuat jadwal bulan untuk penghapusan:", error);
+          alert("Jadwal bulan aktif gagal dimuat. Periksa koneksi internet.");
+          return;
+        }
+
+        const cacheKey = `${group}-${month}`;
+        const monthSchedule = window.monthCache[cacheKey];
+        if (!Array.isArray(monthSchedule) || monthSchedule.length === 0) {
+          alert("Tidak ada jadwal pada bulan yang sedang aktif.");
+          return;
+        }
+
+        const monthLabel = formatDate(monthDate, {
+          month: "long",
+          year: "numeric",
+        });
+        const groupLabel = group === "ikhwan" ? "Ikhwan" : "Akhwat";
+        if (
+          !confirm(
+            `Hapus seluruh penugasan pada jadwal ${groupLabel} bulan ${monthLabel}?\n\nSemua nama Imam, Muadzin, dan jadwal Tausiah pada bulan ini akan dikosongkan. Tanggal serta waktu shalat tetap dipertahankan.`,
+          )
+        ) {
+          return;
+        }
+
+        const backup = JSON.parse(JSON.stringify(monthSchedule));
+        monthSchedule.forEach((day) => {
+          (day.sessions || []).forEach((session) => {
+            session[2] = null;
+            session[3] = null;
+            if (session.length > 4) session[4] = null;
+          });
+          day.tausiah = null;
+        });
+
+        const saved = await saveScheduleMonths([month]);
+        if (!saved) {
+          window.monthCache[cacheKey] = backup;
+          renderUI();
+          return;
+        }
+
+        alert(`Seluruh penugasan bulan ${monthLabel} berhasil dikosongkan.`);
+        renderUI();
+      };
+
+      window.randomizeActiveMonthSchedule = async () => {
+        if (role !== "admin") return;
+
+        const monthDate = activeMonth();
+        const month = monthId(monthDate);
+        try {
+          // Pastikan data bulan yang sedang ditampilkan sudah tersedia.
+          await fetchMonthData(group, monthDate, true);
+        } catch (error) {
+          console.error("Gagal memuat jadwal bulan untuk pengacakan:", error);
+          alert("Jadwal bulan aktif gagal dimuat. Periksa koneksi internet.");
+          return;
+        }
+
+        const monthSchedule = window.monthCache[`${group}-${month}`];
+        if (!Array.isArray(monthSchedule) || !monthSchedule.length) {
+          alert("Tidak ada jadwal pada bulan yang sedang aktif.");
+          return;
+        }
+
+        const monthLabel = formatDate(monthDate, {
+          month: "long",
+          year: "numeric",
+        });
+        if (
+          !confirm(`Acak seluruh penugasan Imam dan Muadzin untuk ${monthLabel}?
+
+Semua penugasan Imam dan Muadzin pada bulan ini akan diganti. Jadwal Tausiah tidak akan berubah.`)
+        ) {
+          return;
+        }
+
+        const activeStudents = students[group]
+          .map((_, index) => index)
+          .filter((index) => !window.inactiveCache.has(index));
+        if (!activeStudents.length) {
+          alert("Tidak ada mahasiswa aktif untuk menerima penugasan.");
+          return;
+        }
+
+        const backup = monthSchedule.map((day) => ({
+          date: day.date,
+          sessions: day.sessions.map((session) => [...session]),
+          tausiah: day.tausiah ? { ...day.tausiah } : null,
+        }));
+
+        const assignmentSlots = [];
+        monthSchedule.forEach((day) => {
+          day.sessions.forEach((session, sessionIndex) => {
+            assignmentSlots.push({ day, session, sessionIndex, field: 2 });
+            assignmentSlots.push({ day, session, sessionIndex, field: 3 });
+          });
+        });
+
+        // Distribusi merata untuk seluruh bulan: mahasiswa dengan total tugas
+        // lebih sedikit diprioritaskan, dan satu orang tidak mengisi Imam serta
+        // Muadzin pada sesi yang sama selama kandidat lain tersedia.
+        const assignmentCounts = new Map(
+          activeStudents.map((index) => [index, 0]),
+        );
+        const usedSinceCycle = new Set();
+        let activeSessionKey = "";
+        let usedInSession = new Set();
+
+        assignmentSlots.forEach((slot) => {
+          const sessionKey = `${slot.day.date}-${slot.sessionIndex}`;
+          if (sessionKey !== activeSessionKey) {
+            activeSessionKey = sessionKey;
+            usedInSession = new Set();
+          }
+
+          let candidates = activeStudents.filter(
+            (index) => !usedSinceCycle.has(index),
+          );
+          if (!candidates.length) {
+            usedSinceCycle.clear();
+            candidates = activeStudents.slice();
+          }
+
+          const differentPersonCandidates = candidates.filter(
+            (index) => !usedInSession.has(index),
+          );
+          if (differentPersonCandidates.length)
+            candidates = differentPersonCandidates;
+
+          const lowestLoad = Math.min(
+            ...candidates.map((index) => assignmentCounts.get(index) || 0),
+          );
+          const fairestCandidates = candidates.filter(
+            (index) => (assignmentCounts.get(index) || 0) === lowestLoad,
+          );
+          const chosen =
+            fairestCandidates[
+              Math.floor(Math.random() * fairestCandidates.length)
+            ];
+
+          slot.session[slot.field] = chosen;
+          usedSinceCycle.add(chosen);
+          usedInSession.add(chosen);
+          assignmentCounts.set(chosen, (assignmentCounts.get(chosen) || 0) + 1);
+        });
+
+        // Klik ulang tetap mengundi ulang. Jika hasil kebetulan identik,
+        // tukar dua nama berbeda agar susunan berubah tanpa merusak pasangan sesi.
+        const before = backup.flatMap((day) =>
+          day.sessions.flatMap((session) => [session[2], session[3]]),
+        );
+        const after = assignmentSlots.map((slot) => slot.session[slot.field]);
+        if (
+          after.length > 1 &&
+          after.every((value, index) => value === before[index])
+        ) {
+          let swapped = false;
+          for (let i = 0; i < assignmentSlots.length && !swapped; i++) {
+            for (let j = i + 1; j < assignmentSlots.length && !swapped; j++) {
+              const first = assignmentSlots[i];
+              const second = assignmentSlots[j];
+              if (first.session[first.field] === second.session[second.field])
+                continue;
+              const firstSessionKey = `${first.day.date}-${first.sessionIndex}`;
+              const secondSessionKey = `${second.day.date}-${second.sessionIndex}`;
+              // Tukar hanya dalam sesi yang sama agar pasangan Imam-Muadzin
+              // tetap terdiri dari dua orang berbeda.
+              if (firstSessionKey === secondSessionKey) {
+                const temporary = first.session[first.field];
+                first.session[first.field] = second.session[second.field];
+                second.session[second.field] = temporary;
+                swapped = true;
+              }
+            }
+          }
+        }
+
+        const saved = await saveScheduleMonths([month]);
+        if (!saved) {
+          backup.forEach((savedDay) => {
+            const day = monthSchedule.find(
+              (entry) => entry.date === savedDay.date,
+            );
+            if (!day) return;
+            day.sessions = savedDay.sessions.map((session) => [...session]);
+            day.tausiah = savedDay.tausiah ? { ...savedDay.tausiah } : null;
+          });
+          renderUI();
+          return;
+        }
+
+        const counts = [...assignmentCounts.values()];
+        const spread = counts.length
+          ? Math.max(...counts) - Math.min(...counts)
+          : 0;
+        alert(`Jadwal Imam dan Muadzin bulan ${monthLabel} berhasil diacak.
+Pembagian tugas ${spread <= 1 ? "merata" : "diupayakan seimbang"}.
+Jadwal Tausiah tetap tidak berubah.`);
+        renderUI();
+      };
+
       // 7. Penggambaran Tampilan (Render)
       function renderUI() {
         const m = activeMonth();
@@ -1591,13 +2176,16 @@
 
         document.querySelector(".page-nav").style.display =
           role === "admin" ? "flex" : "none";
+        $("dashboardExportActions").classList.toggle(
+          "hidden",
+          role !== "admin",
+        );
         if (
           role !== "admin" &&
           !$("page-dashboard").classList.contains("active")
         )
           switchPage("page-dashboard");
 
-        $("resetAssignments").classList.toggle("hidden", role !== "admin");
         $("panelTitle").textContent =
           "Jadwal " + (group === "ikhwan" ? "Ikhwan" : "Akhwat");
         $("weekLabel").textContent = formatDate(m, {
@@ -1606,15 +2194,15 @@
         });
         $("subtitle").textContent =
           role === "admin"
-            ? "Kelola penugasan bulanan."
+            ? "Kelola jadwal bulanan, hapus seluruh penugasan, atau acak Imam dan Muadzin untuk satu bulan aktif."
             : `Anda hanya dapat melihat jadwal ${group.toUpperCase()}.`;
 
-        $("scheduleRows").innerHTML = getMonthScheduleLocal()
+        const currentMonthSchedule = getMonthScheduleLocal();
+        renderMonthTools(currentMonthSchedule);
+        $("scheduleRows").innerHTML = currentMonthSchedule
           .flatMap((day) => day.sessions.map((s, si) => entryHTML(day, s, si)))
           .join("");
-        $("tausiahRows").innerHTML = renderTausiahWeeks(
-          getMonthScheduleLocal(),
-        );
+        $("tausiahRows").innerHTML = renderTausiahWeeks(currentMonthSchedule);
 
         renderAssignments();
         renderData();
@@ -1729,6 +2317,361 @@
             ? `<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted)">Belum ada jadwal pekan ini.</td></tr>`
             : currentWeekDays.join("");
       }
+
+      // 7A. Ekspor jadwal Dashboard Admin ke PDF dan PNG.
+      // Data ekspor dibaca dari tabel dashboard yang sedang tampil, sehingga
+      // mengikuti pekan terpilih dan pembaruan realtime Firestore.
+      function getDashboardExportRows() {
+        return Array.from($("currentWeekRows").querySelectorAll("tr")).map(
+          (tr) => {
+            const cells = Array.from(tr.querySelectorAll("td")).map((td) => ({
+              text: (td.innerText || td.textContent || "").trim(),
+              colspan: Math.max(1, Number(td.colSpan || 1)),
+            }));
+            return {
+              cells,
+              isTausiah: cells.some((cell) => /TAUSIAH/i.test(cell.text)),
+              isEmpty: cells.length === 1 && cells[0].colspan >= 4,
+            };
+          },
+        );
+      }
+
+      function getDashboardExportMeta() {
+        const groupName = group === "akhwat" ? "AKHWAT" : "IKHWAN";
+        const dateRange =
+          $("dashDateRange").textContent.trim() || "Pekan berjalan";
+        const now = new Date();
+        const printedAt =
+          new Intl.DateTimeFormat("id-ID", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          }).format(now) + " WIB";
+        return { groupName, dateRange, printedAt };
+      }
+
+      function escapeExportHTML(value) {
+        return String(value).replace(
+          /[&<>"']/g,
+          (char) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[char],
+        );
+      }
+
+      window.printDashboardSchedule = () => {
+        if (role !== "admin") {
+          alert("Fitur cetak hanya tersedia untuk Admin.");
+          return;
+        }
+        const popup = window.open("", "_blank", "width=1100,height=800");
+        if (!popup) {
+          alert(
+            "Popup diblokir browser. Izinkan popup untuk aplikasi ini, lalu tekan Cetak PDF kembali.",
+          );
+          return;
+        }
+
+        const meta = getDashboardExportMeta();
+        const rows = getDashboardExportRows();
+        const body = rows
+          .map((row) => {
+            if (row.isEmpty) {
+              return `<tr><td colspan="4" class="empty">${escapeExportHTML(row.cells[0].text)}</td></tr>`;
+            }
+            let col = 0;
+            const cells = row.cells
+              .map((cell) => {
+                const colspan = Math.min(4, cell.colspan);
+                col += colspan;
+                const content = escapeExportHTML(cell.text).replace(
+                  /\n/g,
+                  "<br>",
+                );
+                return `<td colspan="${colspan}">${content}</td>`;
+              })
+              .join("");
+            return `<tr class="${row.isTausiah ? "tausiah" : ""}">${cells}</tr>`;
+          })
+          .join("");
+
+        const documentHTML = `<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jadwal ${meta.groupName} — ${escapeExportHTML(meta.dateRange)}</title>
+<style>
+  @page { size: A4 landscape; margin: 13mm; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: Arial, Segoe UI, sans-serif; color: #142b45; }
+  .brand { background: linear-gradient(120deg,#011f3f,#17436b); color: #fff; padding: 22px 26px 20px; border-bottom: 5px solid #c79d3a; }
+  .brand small { display: block; color: #d8e2ed; font-size: 10px; letter-spacing: 2px; font-weight: 700; }
+  h1 { margin: 8px 0 4px; font-size: 23px; letter-spacing: .4px; }
+  .sub { color: #e6edf5; font-size: 12px; }
+  .meta { display: flex; justify-content: space-between; gap: 12px; padding: 14px 2px 12px; font-size: 12px; }
+  .meta strong { color: #011f3f; }
+  table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 12px; }
+  col:nth-child(1) { width: 22%; } col:nth-child(2) { width: 17%; } col:nth-child(3) { width: 34%; } col:nth-child(4) { width: 27%; }
+  th { text-align: left; background: #eaf0f6; color: #27435f; padding: 11px 12px; border: 1px solid #d6e0ea; font-size: 10px; letter-spacing: .6px; }
+  td { padding: 12px; border: 1px solid #dce4ec; vertical-align: middle; line-height: 1.5; white-space: normal; overflow-wrap: anywhere; }
+  tbody tr:nth-child(even) { background: #f8fafc; }
+  tbody tr.tausiah { background: #fffae9; color: #735619; font-weight: 700; }
+  td.empty { text-align: center; color: #718096; padding: 24px; }
+  .footer { margin-top: 18px; padding-top: 9px; border-top: 1px solid #dce4ec; color: #718096; font-size: 9px; display: flex; justify-content: space-between; }
+  @media screen { body { max-width: 1100px; margin: 24px auto; padding: 0 20px; } .print-hint { margin: 12px 0; color: #53647a; font-size: 12px; } }
+  @media print { .print-hint { display: none; } }
+</style>
+</head>
+<body>
+  <header class="brand"><small>STIT AL WAFI BOGOR</small><h1>JADWAL IMAM &amp; MUADZIN MAHASISWA</h1><div class="sub">Jadwal Pekanan — ${meta.groupName}</div></header>
+  <div class="meta"><span><strong>Kelompok:</strong> ${meta.groupName}</span><span><strong>Periode:</strong> ${escapeExportHTML(meta.dateRange)}</span></div>
+  <table><colgroup><col><col><col><col></colgroup><thead><tr><th>HARI &amp; TANGGAL</th><th>WAKTU</th><th>IMAM / PEMATERI</th><th>MUADZIN</th></tr></thead><tbody>${body}</tbody></table>
+  <div class="footer"><span>STIT Al Wafi Bogor · Sistem Jadwal Imam &amp; Muadzin</span><span>Dicetak: ${escapeExportHTML(meta.printedAt)}</span></div>
+  <p class="print-hint">Pada dialog cetak, pilih “Save as PDF” / “Simpan sebagai PDF” untuk menyimpan dokumen.</p>
+</body></html>`;
+
+        popup.onload = () => {
+          popup.focus();
+          setTimeout(() => popup.print(), 350);
+        };
+        popup.document.open();
+        popup.document.write(documentHTML);
+        popup.document.close();
+      };
+
+      window.downloadDashboardScheduleImage = () => {
+        if (role !== "admin") {
+          alert("Fitur unduh gambar hanya tersedia untuk Admin.");
+          return;
+        }
+        const button = $("btnDownloadScheduleImage");
+        const originalHTML = button.innerHTML;
+        button.disabled = true;
+        button.textContent = "Membuat gambar...";
+
+        try {
+          const meta = getDashboardExportMeta();
+          const rows = getDashboardExportRows();
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          if (!ctx)
+            throw new Error("Browser tidak mendukung pembuatan gambar.");
+
+          const width = 1600;
+          const margin = 76;
+          const tableWidth = width - margin * 2;
+          const colWidths = [300, 230, 510, 408];
+          const headerHeight = 250;
+          const tableHeadHeight = 72;
+          const footerHeight = 95;
+          const fontSize = 27;
+          const lineHeight = 36;
+
+          function wrapText(text, maxWidth, font) {
+            ctx.font = font;
+            const result = [];
+            String(text || "")
+              .split("\n")
+              .forEach((paragraph) => {
+                const words = paragraph.split(/\s+/).filter(Boolean);
+                if (!words.length) {
+                  result.push("");
+                  return;
+                }
+                let line = "";
+                words.forEach((word) => {
+                  const trial = line ? `${line} ${word}` : word;
+                  if (line && ctx.measureText(trial).width > maxWidth) {
+                    result.push(line);
+                    line = word;
+                  } else line = trial;
+                });
+                if (line) result.push(line);
+              });
+            return result.length ? result : [""];
+          }
+
+          const prepared = rows.map((row) => {
+            if (row.isEmpty) {
+              const lines = wrapText(
+                row.cells[0]?.text || "Belum ada jadwal pekan ini.",
+                tableWidth - 48,
+                `600 ${fontSize}px Arial`,
+              );
+              return {
+                ...row,
+                cells: [
+                  {
+                    text: row.cells[0]?.text || "Belum ada jadwal pekan ini.",
+                    colspan: 4,
+                    lines,
+                  },
+                ],
+                height: Math.max(92, lines.length * lineHeight + 38),
+              };
+            }
+            const cells = row.cells.map((cell) => ({
+              ...cell,
+              lines: wrapText(
+                cell.text.replace(/\s*\n\s*/g, "\n"),
+                colWidths.slice(0, cell.colspan).reduce((a, b) => a + b, 0) -
+                  40,
+                `${row.isTausiah ? "700" : "500"} ${fontSize}px Arial`,
+              ),
+            }));
+            const maxLines = Math.max(
+              1,
+              ...cells.map((cell) => cell.lines.length),
+            );
+            return {
+              ...row,
+              cells,
+              height: Math.max(92, maxLines * lineHeight + 38),
+            };
+          });
+          const totalRowsHeight = prepared.reduce(
+            (sum, row) => sum + row.height,
+            0,
+          );
+          const height =
+            headerHeight + tableHeadHeight + totalRowsHeight + footerHeight;
+          canvas.width = width;
+          canvas.height = height;
+
+          ctx.fillStyle = "#f1f5f9";
+          ctx.fillRect(0, 0, width, height);
+          const gradient = ctx.createLinearGradient(0, 0, width, 0);
+          gradient.addColorStop(0, "#011f3f");
+          gradient.addColorStop(1, "#17436b");
+          ctx.fillStyle = gradient;
+          ctx.fillRect(0, 0, width, headerHeight);
+          ctx.fillStyle = "#c79d3a";
+          ctx.fillRect(0, headerHeight - 7, width, 7);
+
+          ctx.fillStyle = "#e9c978";
+          ctx.font = "700 22px Arial";
+          ctx.fillText("STIT AL WAFI BOGOR", margin, 62);
+          ctx.fillStyle = "#ffffff";
+          ctx.font = "800 45px Arial";
+          ctx.fillText("JADWAL IMAM & MUADZIN", margin, 130);
+          ctx.font = "600 27px Arial";
+          ctx.fillStyle = "#dbe6f1";
+          ctx.fillText(`JADWAL PEKANAN — ${meta.groupName}`, margin, 178);
+          ctx.font = "24px Arial";
+          ctx.fillStyle = "#ffffff";
+          ctx.fillText(meta.dateRange, margin, 218);
+
+          let y = headerHeight;
+          const headers = [
+            "HARI & TANGGAL",
+            "WAKTU",
+            "IMAM / PEMATERI",
+            "MUADZIN",
+          ];
+          let x = margin;
+          headers.forEach((label, i) => {
+            ctx.fillStyle = "#e7eef6";
+            ctx.fillRect(x, y, colWidths[i], tableHeadHeight);
+            ctx.strokeStyle = "#cbd5e1";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x, y, colWidths[i], tableHeadHeight);
+            ctx.fillStyle = "#27435f";
+            ctx.font = "700 21px Arial";
+            ctx.fillText(label, x + 18, y + 43);
+            x += colWidths[i];
+          });
+          y += tableHeadHeight;
+
+          prepared.forEach((row, rowIndex) => {
+            let col = 0;
+            row.cells.forEach((cell) => {
+              const span = Math.min(4 - col, cell.colspan);
+              const cellWidth = colWidths
+                .slice(col, col + span)
+                .reduce((a, b) => a + b, 0);
+              const cellX =
+                margin + colWidths.slice(0, col).reduce((a, b) => a + b, 0);
+              const fill = row.isEmpty
+                ? "#ffffff"
+                : row.isTausiah
+                  ? "#fff8e5"
+                  : rowIndex % 2
+                    ? "#f8fafc"
+                    : "#ffffff";
+              ctx.fillStyle = fill;
+              ctx.fillRect(cellX, y, cellWidth, row.height);
+              ctx.strokeStyle = row.isTausiah ? "#e9d59a" : "#d8e1eb";
+              ctx.lineWidth = 2;
+              ctx.strokeRect(cellX, y, cellWidth, row.height);
+              ctx.fillStyle = row.isTausiah
+                ? "#735619"
+                : row.isEmpty
+                  ? "#718096"
+                  : "#142b45";
+              ctx.font = `${row.isTausiah || col === 0 ? "700" : "500"} ${fontSize}px Arial`;
+              const lines = cell.lines || [cell.text];
+              const blockHeight = lines.length * lineHeight;
+              let textY = y + Math.max(20, (row.height - blockHeight) / 2) + 25;
+              lines.forEach((line) => {
+                ctx.fillText(line, cellX + 20, textY, cellWidth - 40);
+                textY += lineHeight;
+              });
+              col += span;
+            });
+            y += row.height;
+          });
+
+          ctx.fillStyle = "#64748b";
+          ctx.font = "20px Arial";
+          ctx.fillText(
+            "STIT Al Wafi Bogor · Sistem Jadwal Imam & Muadzin",
+            margin,
+            y + 45,
+          );
+          ctx.textAlign = "right";
+          ctx.fillText(`Dicetak: ${meta.printedAt}`, width - margin, y + 45);
+          ctx.textAlign = "left";
+
+          canvas.toBlob((blob) => {
+            if (!blob) {
+              alert(
+                "Gagal membuat gambar. Coba gunakan browser Chrome atau Edge terbaru.",
+              );
+              button.disabled = false;
+              button.innerHTML = originalHTML;
+              return;
+            }
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            const safeRange = meta.dateRange
+              .replace(/[^a-zA-Z0-9]+/g, "-")
+              .replace(/^-|-$/g, "");
+            link.href = url;
+            link.download = `jadwal-${group}-${safeRange || "pekanan"}.png`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1500);
+            alert("Gambar jadwal berhasil diunduh.");
+            button.disabled = false;
+            button.innerHTML = originalHTML;
+          }, "image/png");
+        } catch (error) {
+          console.error("Gagal membuat gambar jadwal:", error);
+          alert(`Gagal membuat gambar: ${error.message || error}`);
+          button.disabled = false;
+          button.innerHTML = originalHTML;
+        }
+      };
 
       function renderAssignments() {
         const list = students[group],
@@ -1857,13 +2800,13 @@
               return `<tr><td class="monthly-date">${weekLabel}</td><td class="monthly-time">${selected ? selected.label : "—"}</td><td>${presenter}</td><td>—</td></tr>`;
             }
 
-            const timeOptions = `<option value="">Waktu</option>${candidates
+            const timeOptions = `<option value="">Pilih salah satu dari 6 waktu</option>${candidates
               .map(
                 (item) =>
                   `<option value="${item.value}" ${item.value === selectedValue ? "selected" : ""}>${item.label}</option>`,
               )
               .join("")}`;
-            const presenterOptions = `<option value="">Pemateri</option>${students[
+            const presenterOptions = `<option value="">Pilih pemateri</option>${students[
               group
             ]
               .map((name, index) => ({ name, index }))
@@ -1944,36 +2887,6 @@
         s[field] = idx;
         const saved = await window.saveMonthSchedule();
         if (!saved) s[field] = previousValue;
-        renderUI();
-      };
-
-      window.resetAssignments = async () => {
-        if (!confirm("Kosongkan semua penugasan di bulan ini?")) return;
-        const schedule = getMonthScheduleLocal();
-        const previousAssignments = schedule.map((day) => ({
-          sessions: day.sessions.map((s) => [s[2], s[3]]),
-          tausiah: day.tausiah ? { ...day.tausiah } : null,
-        }));
-
-        schedule.forEach((day) => {
-          day.sessions.forEach((s) => {
-            s[2] = null;
-            s[3] = null;
-            s[4] = null;
-          });
-          day.tausiah = null;
-        });
-
-        const saved = await window.saveMonthSchedule();
-        if (!saved) {
-          schedule.forEach((day, dayIndex) => {
-            day.sessions.forEach((s, sessionIndex) => {
-              [s[2], s[3]] =
-                previousAssignments[dayIndex].sessions[sessionIndex];
-            });
-            day.tausiah = previousAssignments[dayIndex].tausiah;
-          });
-        }
         renderUI();
       };
 
