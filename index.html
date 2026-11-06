@@ -1120,841 +1120,848 @@
 
     <!-- SCRIPT UTAMA BERBASIS FIREBASE -->
     <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-      import {
-        getFirestore,
-        doc,
-        getDoc,
-        setDoc,
-      } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+          import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+          import {
+            getFirestore,
+            doc,
+            getDoc,
+            setDoc,
+          } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-      // 1. Konfigurasi Firebase
-      const firebaseConfig = {
-        apiKey: "AIzaSyDRm_Q4ECqxfFeEzkkfhSunImp36jRrus4",
-        authDomain: "ukm-almanar.firebaseapp.com",
-        projectId: "ukm-almanar",
-        storageBucket: "ukm-almanar.firebasestorage.app",
-        messagingSenderId: "943949560633",
-        appId: "1:943949560633:web:6eee3e2373508d8a44c6e8",
-      };
+          // 1. Konfigurasi Firebase
+          const firebaseConfig = {
+            apiKey: "AIzaSyDRm_Q4ECqxfFeEzkkfhSunImp36jRrus4",
+            authDomain: "ukm-almanar.firebaseapp.com",
+            projectId: "ukm-almanar",
+            storageBucket: "ukm-almanar.firebasestorage.app",
+            messagingSenderId: "943949560633",
+            appId: "1:943949560633:web:6eee3e2373508d8a44c6e8",
+          };
 
-      const app = initializeApp(firebaseConfig);
-      window.db = getFirestore(app);
+          const app = initializeApp(firebaseConfig);
+          window.db = getFirestore(app);
 
-      // Mock Alerts
-      window.alert = function (msg) {
-        const dialog = document.createElement("div");
-        dialog.style.cssText =
-          "position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#b42332;color:#fff;padding:12px 24px;border-radius:8px;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.15);font-size:13px;font-weight:bold;";
-        dialog.innerText = msg;
-        document.body.appendChild(dialog);
-        setTimeout(() => dialog.remove(), 3500);
-      };
+          // Mock Alerts
+          window.alert = function (msg) {
+            const dialog = document.createElement("div");
+            dialog.style.cssText =
+              "position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#b42332;color:#fff;padding:12px 24px;border-radius:8px;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.15);font-size:13px;font-weight:bold;";
+            dialog.innerText = msg;
+            document.body.appendChild(dialog);
+            setTimeout(() => dialog.remove(), 3500);
+          };
 
-      // 2. Data Referensi Statis
-      const students = {
-        ikhwan: [
-          "ABDUL QOWI FAWWAZ AL-ATSARI",
-          "ABDULLAH IBNUL MUBARAK",
-          "AFIF AHMAD MUFLIH EL HASSAN",
-          "AHMAD HASSAAN SUGITAHARI",
-          "AHMAD ZAID ABDUR ROUF",
-          "DRASTHYA RAFA ADHITIAWAN",
-          "MUHAMMAD CAESAR ALMAYDA WIRA",
-          "MUHAMMAD ERSADY RIVAI",
-          "MUHAMMAD LUTFIR AMIN RAHMAN",
-          "WINARNOKO",
-          "FERDINAN FAWWAZ IMANULLAH",
-          "FARRELINO ACHMAD DARIEF",
-          "RAFIF MUAFA ADDARUQUTHNI",
-          "IHSAN AL MUNIR BL",
-          "MUHAMMAD IZZARDA IZHARULHAQ",
-          "MUHAMMAD IRSYAD",
-          "MUHAMMAD AFFAN",
-          "IQBAL ABDUL GHANI",
-          "SAEPUL MUNAWAR RIZAL",
-          "MUHAMMAD FADHIL IZZAZ DZAKIRAH",
-        ],
-        akhwat: [
-          "BALQIS ZERLINDA CIPUTRI",
-          "INDAH PURNAMA SARI",
-          "KHONSA' ABDURROCHMAN",
-          "MIFTAH NUR AZIZAH",
-          "MUDRIKAH ZAIN",
-          "MUTHIA NABILA HUSNA",
-          "OCTAVIA ZULKARNAEN",
-          "RAYYA RIFKAH FALIHAH",
-          "SITI NAMIRA UQBA HASANAH",
-          "ALYA LUTFIA MUMTAZ",
-          "ANNISA UL KARIMAH",
-          "MUFIDAH",
-          "NADZMINA AL KHALIFI HUMAIRA",
-          "HALIZA SOFIE AMALIA",
-          "TALITA HASNA AZIZAH SALSABILA",
-          "SHAFA KHALIDA",
-          "SYAHIDAH RABIYATUN NISA",
-          "LIA APRIYANI",
-          "AISYAH",
-          "YULI EKA OKTAFIANI",
-        ],
-      };
-      const nims = {
-        ikhwan: [
-          "252130101001",
-          "252130101002",
-          "252130101003",
-          "252130101004",
-          "252130101005",
-          "252130101013",
-          "252130101026",
-          "252130101027",
-          "252130101029",
-          "252130101038",
-          "252130101048",
-          "252130101057",
-          "26213010203",
-          "26213010204",
-          "26213010202",
-          "26213010207",
-          "26213010216",
-          "26213010212",
-          "26213010215",
-          "26213010213",
-        ],
-        akhwat: [
-          "252130101011",
-          "252130101016",
-          "252130101021",
-          "252130101023",
-          "252130101024",
-          "252130101031",
-          "252130101035",
-          "252130101036",
-          "252130101037",
-          "252130101043",
-          "252130101047",
-          "252130101050",
-          "252130101060",
-          "26213010216",
-          "26213010211",
-          "26213010205",
-          "26213010206",
-          "26213010209",
-          "26213010208",
-          "26213010217",
-        ],
-      };
-      const cohortSplit = { ikhwan: 12, akhwat: 13 };
-      const scheduleTemplate = {
-        ikhwan: [
-          {
-            day: "KAMIS",
-            sessions: [
-              ["Dzuhur", "11:40"],
-              ["Ashar", "14:55"],
+          // 2. Data Referensi Statis
+          const students = {
+            ikhwan: [
+              "ABDUL QOWI FAWWAZ AL-ATSARI",
+              "ABDULLAH IBNUL MUBARAK",
+              "AFIF AHMAD MUFLIH EL HASSAN",
+              "AHMAD HASSAAN SUGITAHARI",
+              "AHMAD ZAID ABDUR ROUF",
+              "DRASTHYA RAFA ADHITIAWAN",
+              "MUHAMMAD CAESAR ALMAYDA WIRA",
+              "MUHAMMAD ERSADY RIVAI",
+              "MUHAMMAD LUTFIR AMIN RAHMAN",
+              "WINARNOKO",
+              "FERDINAN FAWWAZ IMANULLAH",
+              "FARRELINO ACHMAD DARIEF",
+              "RAFIF MUAFA ADDARUQUTHNI",
+              "IHSAN AL MUNIR BL",
+              "MUHAMMAD IZZARDA IZHARULHAQ",
+              "MUHAMMAD IRSYAD",
+              "MUHAMMAD AFFAN",
+              "IQBAL ABDUL GHANI",
+              "SAEPUL MUNAWAR RIZAL",
+              "MUHAMMAD FADHIL IZZAZ DZAKIRAH",
             ],
-          },
-          { day: "JUMAT", sessions: [["Ashar", "14:55"]] },
-          {
-            day: "SABTU",
-            sessions: [
-              ["Dzuhur", "11:40"],
-              ["Ashar", "14:55"],
+            akhwat: [
+              "BALQIS ZERLINDA CIPUTRI",
+              "INDAH PURNAMA SARI",
+              "KHONSA' ABDURROCHMAN",
+              "MIFTAH NUR AZIZAH",
+              "MUDRIKAH ZAIN",
+              "MUTHIA NABILA HUSNA",
+              "OCTAVIA ZULKARNAEN",
+              "RAYYA RIFKAH FALIHAH",
+              "SITI NAMIRA UQBA HASANAH",
+              "ALYA LUTFIA MUMTAZ",
+              "ANNISA UL KARIMAH",
+              "MUFIDAH",
+              "NADZMINA AL KHALIFI HUMAIRA",
+              "HALIZA SOFIE AMALIA",
+              "TALITA HASNA AZIZAH SALSABILA",
+              "SHAFA KHALIDA",
+              "SYAHIDAH RABIYATUN NISA",
+              "LIA APRIYANI",
+              "AISYAH",
+              "YULI EKA OKTAFIANI",
             ],
-          },
-        ],
-        akhwat: [
-          {
-            day: "KAMIS",
-            sessions: [
-              ["Dzuhur", "11:40"],
-              ["Ashar", "14:55"],
+          };
+          const nims = {
+            ikhwan: [
+              "252130101001",
+              "252130101002",
+              "252130101003",
+              "252130101004",
+              "252130101005",
+              "252130101013",
+              "252130101026",
+              "252130101027",
+              "252130101029",
+              "252130101038",
+              "252130101048",
+              "252130101057",
+              "26213010203",
+              "26213010204",
+              "26213010202",
+              "26213010207",
+              "26213010216",
+              "26213010212",
+              "26213010215",
+              "26213010213",
             ],
-          },
-          { day: "JUMAT", sessions: [["Ashar", "14:55"]] },
-          {
-            day: "SABTU",
-            sessions: [
-              ["Dzuhur", "11:40"],
-              ["Ashar", "14:55"],
+            akhwat: [
+              "252130101011",
+              "252130101016",
+              "252130101021",
+              "252130101023",
+              "252130101024",
+              "252130101031",
+              "252130101035",
+              "252130101036",
+              "252130101037",
+              "252130101043",
+              "252130101047",
+              "252130101050",
+              "252130101060",
+              "26213010216",
+              "26213010211",
+              "26213010205",
+              "26213010206",
+              "26213010209",
+              "26213010208",
+              "26213010217",
             ],
-          },
-        ],
-      };
+          };
+          const cohortSplit = { ikhwan: 12, akhwat: 13 };
+          const scheduleTemplate = {
+            ikhwan: [
+              {
+                day: "KAMIS",
+                sessions: [
+                  ["Dzuhur", "11:40"],
+                  ["Ashar", "14:55"],
+                ],
+              },
+              { day: "JUMAT", sessions: [["Ashar", "14:55"]] },
+              {
+                day: "SABTU",
+                sessions: [
+                  ["Dzuhur", "11:40"],
+                  ["Ashar", "14:55"],
+                ],
+              },
+            ],
+            akhwat: [
+              {
+                day: "KAMIS",
+                sessions: [
+                  ["Dzuhur", "11:40"],
+                  ["Ashar", "14:55"],
+                ],
+              },
+              { day: "JUMAT", sessions: [["Ashar", "14:55"]] },
+              {
+                day: "SABTU",
+                sessions: [
+                  ["Dzuhur", "11:40"],
+                  ["Ashar", "14:55"],
+                ],
+              },
+            ],
+          };
 
-      // 3. State & Cache System
-      let role = "admin",
-        group = "ikhwan";
-      let monthOffset = 0,
-        dashWeekOffset = 0;
-      const $ = (id) => document.getElementById(id);
+          // 3. State & Cache System
+          let role = "admin",
+            group = "ikhwan";
+          let monthOffset = 0,
+            dashWeekOffset = 0;
+          const $ = (id) => document.getElementById(id);
 
-      window.monthCache = {};
-      window.inactiveCache = new Set();
-      window.noteCache = { notes: [] };
-
-      // 4. Utils
-      function activeMonth() {
-        const d = new Date();
-        d.setDate(1);
-        d.setHours(12, 0, 0, 0);
-        d.setMonth(d.getMonth() + monthOffset);
-        return d;
-      }
-      function dateKey(d) {
-        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-      }
-      function monthId(d) {
-        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-      }
-      function formatDate(d, opts = { day: "numeric", month: "short" }) {
-        return new Intl.DateTimeFormat("id-ID", opts).format(d);
-      }
-      function mondayKey(date) {
-        const d = new Date(date + "T12:00:00");
-        d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
-        return dateKey(d);
-      }
-
-      // 5. Autentikasi (DIPERBARUI DENGAN SISTEM SESSION)
-      window.doLogin = async () => {
-        const akses = $("loginAkses").value;
-        const pass = $("loginPass").value;
-        let valid = false;
-        if (akses === "admin_stit" && pass === "stitalwafi26") valid = true;
-        else if (akses === "admin_ikhwan" && pass === "Ikhwan@*stit")
-          valid = true;
-        else if (akses === "admin_akhwat" && pass === "Akhwat_stitalwafi")
-          valid = true;
-        else if (akses === "user_ikhwan" && pass === "@*stit") valid = true;
-        else if (akses === "user_akhwat" && pass === "stit_alwafi")
-          valid = true;
-        else alert("Kombinasi Akses dan Password Salah!");
-
-        if (valid) {
-          role = akses.startsWith("admin")
-            ? "admin"
-            : akses.replace("user_", "");
-          group = akses.includes("akhwat") ? "akhwat" : "ikhwan";
-
-          // Simpan sesi ke browser agar tidak perlu login ulang saat refresh
-          localStorage.setItem(
-            "manar_session",
-            JSON.stringify({ role, group }),
-          );
-
-          $("loginOverlay").style.display = "none";
-          $("loginPass").value = "";
-
-          await loadDataAndRenderUI();
-        }
-      };
-
-      // FUNGSI LOGOUT
-      window.doLogout = () => {
-        if (confirm("Apakah Anda yakin ingin keluar dari aplikasi?")) {
-          localStorage.removeItem("manar_session");
-          $("loginOverlay").style.display = "flex";
           window.monthCache = {};
+          window.inactiveCache = new Set();
           window.noteCache = { notes: [] };
-        }
-      };
 
-      window.switchPage = (pageId) => {
-        document
-          .querySelectorAll(".nav-btn")
-          .forEach((b) =>
-            b.classList.toggle("active", b.dataset.target === pageId),
-          );
-        document
-          .querySelectorAll(".page-view")
-          .forEach((p) => p.classList.toggle("active", p.id === pageId));
-      };
-
-      // 6. Arsitektur Komunikasi Firestore Server
-      function buildMonthSchedule(g, m) {
-        const days = [],
-          map = { 4: 0, 5: 1, 6: 2 },
-          total = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate();
-        const active = students[g]
-            .map((_, i) => i)
-            .filter((i) => !window.inactiveCache.has(i)),
-          weeks = {},
-          weekSlots = {};
-        for (let n = 1; n <= total; n++) {
-          const d = new Date(m.getFullYear(), m.getMonth(), n, 12),
-            ti = map[d.getDay()];
-          if (ti === undefined) continue;
-          const key = dateKey(d),
-            wk = mondayKey(key);
-          if (weeks[wk] === undefined) weeks[wk] = Object.keys(weeks).length;
-          const templates = scheduleTemplate[g][ti].sessions,
-            offset = active.length ? (weeks[wk] * 13) % active.length : 0;
-          if (weekSlots[wk] === undefined) weekSlots[wk] = 0;
-          let slot = weekSlots[wk];
-          const take = () =>
-            slot < active.length
-              ? active[(offset + slot++) % active.length]
-              : null;
-          const sessions = templates.map(([name, time], si) => [
-            name,
-            time,
-            take(),
-            take(),
-            ti === 0 && si === 0 ? take() : null,
-          ]);
-          weekSlots[wk] = slot;
-          days.push({ date: key, day: scheduleTemplate[g][ti].day, sessions });
-        }
-        return days;
-      }
-
-      async function fetchMonthData(g, m) {
-        const key = `${g}-${monthId(m)}`;
-        if (!window.monthCache[key]) {
-          const snap = await getDoc(
-            doc(window.db, "jadwal_bulanan", `${g}_${monthId(m)}`),
-          );
-          if (snap.exists()) {
-            window.monthCache[key] = snap.data().jadwal;
-          } else {
-            window.monthCache[key] = buildMonthSchedule(g, m);
+          // 4. Utils
+          function activeMonth() {
+            const d = new Date();
+            d.setDate(1);
+            d.setHours(12, 0, 0, 0);
+            d.setMonth(d.getMonth() + monthOffset);
+            return d;
           }
-        }
-      }
+          function dateKey(d) {
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+          }window.saveMonthSchedule
+          function monthId(d) {
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+          }
+          function formatDate(d, opts = { day: "numeric", month: "short" }) {
+            return new Intl.DateTimeFormat("id-ID", opts).format(d);
+          }
+          function mondayKey(date) {
+            const d = new Date(date + "T12:00:00");
+            d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+            return dateKey(d);
+          }
 
-      window.saveMonthSchedule = async () => {
-        const m = activeMonth();
-        const key = `${group}-${monthId(m)}`;
-        try {
-          await setDoc(
-            doc(window.db, "jadwal_bulanan", `${group}_${monthId(m)}`),
-            { jadwal: window.monthCache[key] },
-            { merge: true },
-          );
-        } catch (e) {
-          console.error(e);
-          alert("Gagal menyimpan ke server");
-        }
-      };
+          // 5. Autentikasi (DIPERBARUI DENGAN SISTEM SESSION)
+          window.doLogin = async () => {
+            const akses = $("loginAkses").value;
+            const pass = $("loginPass").value;
+            let valid = false;
+            if (akses === "admin_stit" && pass === "stitalwafi26") valid = true;
+            else if (akses === "admin_ikhwan" && pass === "Ikhwan@*stit")
+              valid = true;
+            else if (akses === "admin_akhwat" && pass === "Akhwat_stitalwafi")
+              valid = true;
+            else if (akses === "user_ikhwan" && pass === "@*stit") valid = true;
+            else if (akses === "user_akhwat" && pass === "stit_alwafi")
+              valid = true;
+            else alert("Kombinasi Akses dan Password Salah!");
 
-      async function loadDataAndRenderUI() {
-        $("loadingOverlay").style.display = "flex";
-        try {
-          const statusSnap = await getDoc(
-            doc(window.db, "status_mahasiswa", group),
-          );
-          window.inactiveCache = statusSnap.exists()
-            ? new Set(statusSnap.data().inactive || [])
-            : new Set();
+            if (valid) {
+              role = akses.startsWith("admin")
+                ? "admin"
+                : akses.replace("user_", "");
+              group = akses.includes("akhwat") ? "akhwat" : "ikhwan";
 
-          const noteSnap = await getDoc(
-            doc(window.db, "catatan_jadwal", group),
-          );
-          window.noteCache =
-            noteSnap.exists() && noteSnap.data().notes
-              ? noteSnap.data()
-              : { notes: [] };
-
-          await fetchMonthData(group, activeMonth());
-
-          const now = new Date();
-          const day = now.getDay();
-          const diff =
-            now.getDate() - day + (day === 0 ? -6 : 1) + dashWeekOffset * 7;
-          const monday = new Date(now.setDate(diff));
-          monday.setHours(12, 0, 0, 0);
-
-          await fetchMonthData(
-            group,
-            new Date(new Date(monday).setDate(monday.getDate() + 3)),
-          );
-          await fetchMonthData(
-            group,
-            new Date(new Date(monday).setDate(monday.getDate() + 4)),
-          );
-          await fetchMonthData(
-            group,
-            new Date(new Date(monday).setDate(monday.getDate() + 5)),
-          );
-
-          renderUI();
-        } catch (e) {
-          console.error(e);
-          alert("Gagal terhubung ke Server Firebase!");
-        }
-        $("loadingOverlay").style.display = "none";
-      }
-
-      function getMonthScheduleLocal(g = group, m = activeMonth()) {
-        return window.monthCache[`${g}-${monthId(m)}`] || [];
-      }
-
-      // 7. Penggambaran Tampilan (Render)
-      function renderUI() {
-        const m = activeMonth();
-        document.body.dataset.group = group;
-
-        document.querySelector(".page-nav").style.display =
-          role === "admin" ? "flex" : "none";
-        if (
-          role !== "admin" &&
-          !$("page-dashboard").classList.contains("active")
-        )
-          switchPage("page-dashboard");
-
-        $("resetAssignments").classList.toggle("hidden", role !== "admin");
-        $("panelTitle").textContent =
-          "Jadwal " + (group === "ikhwan" ? "Ikhwan" : "Akhwat");
-        $("weekLabel").textContent = formatDate(m, {
-          month: "long",
-          year: "numeric",
-        });
-        $("subtitle").textContent =
-          role === "admin"
-            ? "Kelola penugasan bulanan."
-            : `Anda hanya dapat melihat jadwal ${group.toUpperCase()}.`;
-
-        $("scheduleRows").innerHTML = getMonthScheduleLocal()
-          .flatMap((day) => day.sessions.map((s, si) => entryHTML(day, s, si)))
-          .join("");
-        $("tausiahRows").innerHTML = getMonthScheduleLocal()
-          .filter((day) => day.day === "KAMIS")
-          .map((day) =>
-            tausiahHTML(
-              day,
-              day.sessions.findIndex((s) => s[0] === "Dzuhur"),
-            ),
-          )
-          .join("");
-
-        renderAssignments();
-        renderData();
-        renderDashboardTable();
-
-        const notesArray = window.noteCache.notes || [];
-        if (notesArray.length > 0) {
-          $("dashPublishedNote").innerHTML = notesArray
-            .slice()
-            .reverse()
-            .map(
-              (n) => `
-            <div class="dash-note-container" style="margin-bottom: 12px;">
-                <div class="dash-note-icon">!</div>
-                <div class="dash-note-content">
-                    <div class="dash-note-text">${n.text.replace(/\n/g, "<br>")}</div>
-                    <div class="dash-note-meta">
-                        <span class="dash-note-time">${n.ts}</span>
-                        ${role === "admin" ? `<div class="dash-note-actions"><button onclick="editNote(${n.id})">Edit</button><button onclick="deleteNote(${n.id})">Hapus</button></div>` : ""}
-                    </div>
-                </div>
-            </div>`,
-            )
-            .join("");
-        } else {
-          $("dashPublishedNote").innerHTML =
-            `<div style="color:var(--muted); font-size:13px;">Belum ada catatan yang diterbitkan admin.</div>`;
-        }
-      }
-
-      function renderData() {
-        $("dataTitle").textContent =
-          `Data Mahasiswa (${group === "ikhwan" ? "Ikhwan" : "Akhwat"})`;
-        let html = `<div class="cohort-divider-grid">ANGKATAN 2025</div>`;
-        students[group].forEach((name, i) => {
-          if (i === cohortSplit[group])
-            html += `<div class="cohort-divider-grid">ANGKATAN 2026</div>`;
-          const active = !window.inactiveCache.has(i);
-          const nim = nims[group][i];
-
-          html += `<div class="student-card" style="${active ? "" : "opacity: 0.6; filter: grayscale(1);"}">
-            ${
-              role === "admin"
-                ? `<button type="button" class="power-btn" data-active="${active}" onclick="toggleStudent(${i})"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg></button>`
-                : `<div style="position: absolute; top: 16px; right: 16px;"><span style="font-size:10px; font-weight:800; color:${active ? "#15803d" : "#b42332"}">${active ? "AKTIF" : "NONAKTIF"}</span></div>`
-            }
-            <div class="student-photo">
-                <img src="foto/${nim}.jpg" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=eef3f9&color=123d68&size=105';" alt="Foto" style="width:100%; height:100%; object-fit:cover;">
-            </div>
-            <div class="student-name ${active ? "" : "inactive-name"}">${name}</div>
-            <div class="student-nim">NIM: ${nim}</div>
-            <div class="student-prodi">Prodi: MPI</div>
-          </div>`;
-        });
-        $("studentDataGrid").innerHTML = html;
-      }
-
-      function renderDashboardTable() {
-        const now = new Date();
-        const day = now.getDay();
-        const diff =
-          now.getDate() - day + (day === 0 ? -6 : 1) + dashWeekOffset * 7;
-        const monday = new Date(now.setDate(diff));
-        monday.setHours(12, 0, 0, 0);
-        const sunday = new Date(monday);
-        sunday.setDate(monday.getDate() + 6);
-        $("dashDateRange").textContent =
-          `${formatDate(monday, { day: "numeric", month: "short" })} - ${formatDate(sunday, { day: "numeric", month: "short", year: "numeric" })}`;
-
-        let currentWeekDays = [];
-        const list = students[group];
-        [3, 4, 5].forEach((offset) => {
-          let targetDate = new Date(monday);
-          targetDate.setDate(monday.getDate() + offset);
-          let targetMonthSchedule = getMonthScheduleLocal(group, targetDate);
-          let dayData = targetMonthSchedule.find(
-            (d) => d.date === dateKey(targetDate),
-          );
-
-          if (dayData) {
-            let dDate = new Date(dayData.date + "T12:00:00");
-            dayData.sessions.forEach((s) => {
-              let imamText =
-                s[2] !== null
-                  ? list[s[2]]
-                  : "<span style='color:#f43f5e'>Kosong</span>";
-              let muadzinText =
-                s[3] !== null
-                  ? list[s[3]]
-                  : "<span style='color:#f43f5e'>Kosong</span>";
-              currentWeekDays.push(
-                `<tr><td class="date-col">${formatDate(dDate)}<br><span style="font-weight:400;color:var(--muted);font-size:10px">${dayData.day}</span></td><td>${s[0]}<br><span style="color:var(--muted);font-size:10px">${s[1]}</span></td><td class="person-col">${imamText}</td><td class="person-col">${muadzinText}</td></tr>`,
+              // Simpan sesi ke browser agar tidak perlu login ulang saat refresh
+              localStorage.setItem(
+                "manar_session",
+                JSON.stringify({ role, group }),
               );
 
-              if (dayData.day === "KAMIS" && s[0] === "Dzuhur") {
-                let tausiahText =
-                  s[4] !== null
-                    ? list[s[4]]
-                    : "<span style='color:#f43f5e'>Kosong</span>";
-                currentWeekDays.push(
-                  `<tr style="background:#fffbeb"><td class="date-col">${formatDate(dDate)}<br><span style="font-weight:400;color:#735619;font-size:10px">${dayData.day} (TAUSIAH)</span></td><td>Ba'da Dzuhur</td><td class="person-col" colspan="2" style="color:#735619">${tausiahText}</td></tr>`,
-                );
+              $("loginOverlay").style.display = "none";
+              $("loginPass").value = "";
+
+              await loadDataAndRenderUI();
+            }
+          };
+
+          // FUNGSI LOGOUT
+          window.doLogout = () => {
+            if (confirm("Apakah Anda yakin ingin keluar dari aplikasi?")) {
+              localStorage.removeItem("manar_session");
+              $("loginOverlay").style.display = "flex";
+              window.monthCache = {};
+              window.noteCache = { notes: [] };
+            }
+          };
+
+          window.switchPage = (pageId) => {
+            document
+              .querySelectorAll(".nav-btn")
+              .forEach((b) =>
+                b.classList.toggle("active", b.dataset.target === pageId),
+              );
+            document
+              .querySelectorAll(".page-view")
+              .forEach((p) => p.classList.toggle("active", p.id === pageId));
+          };
+
+          // 6. Arsitektur Komunikasi Firestore Server
+          function buildMonthSchedule(g, m) {
+            const days = [],
+              map = { 4: 0, 5: 1, 6: 2 },
+              total = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate();
+            const active = students[g]
+                .map((_, i) => i)
+                .filter((i) => !window.inactiveCache.has(i)),
+              weeks = {},
+              weekSlots = {};
+            for (let n = 1; n <= total; n++) {
+              const d = new Date(m.getFullYear(), m.getMonth(), n, 12),
+                ti = map[d.getDay()];
+              if (ti === undefined) continue;
+              const key = dateKey(d),
+                wk = mondayKey(key);
+              if (weeks[wk] === undefined) weeks[wk] = Object.keys(weeks).length;
+              const templates = scheduleTemplate[g][ti].sessions,
+                offset = active.length ? (weeks[wk] * 13) % active.length : 0;
+              if (weekSlots[wk] === undefined) weekSlots[wk] = 0;
+              let slot = weekSlots[wk];
+              const take = () =>
+                slot < active.length
+                  ? active[(offset + slot++) % active.length]
+                  : null;
+              const sessions = templates.map(([name, time], si) => [
+                name,
+                time,
+                take(),
+                take(),
+                ti === 0 && si === 0 ? take() : null,
+              ]);
+              weekSlots[wk] = slot;
+              days.push({ date: key, day: scheduleTemplate[g][ti].day, sessions });
+            }
+            return days;
+          }
+
+          async function fetchMonthData(g, m) {
+            const key = `${g}-${monthId(m)}`;
+            if (!window.monthCache[key]) {
+              const snap = await getDoc(
+                doc(window.db, "jadwal_bulanan", `${g}_${monthId(m)}`),
+              );
+              if (snap.exists()) {
+                window.monthCache[key] = snap.data().jadwal;
+              } else {
+                window.monthCache[key] = buildMonthSchedule(g, m);
+              }
+            }
+          }
+
+        window.saveMonthSchedule = async () => {
+      const m = activeMonth();
+      const key = `${group}-${monthId(m)}`;
+
+      try {
+        console.log("Mencoba menyimpan jadwal:", {
+          project: "ukm-almanar",
+          group,
+          month: monthId(m),
+          key,
+          data: window.monthCache[key]
+        });
+
+        await setDoc(
+          doc(window.db, "jadwal_bulanan", `${group}_${monthId(m)}`),
+          { jadwal: window.monthCache[key] },
+          { merge: true }
+        );
+
+        console.log("BERHASIL: Jadwal tersimpan ke Firestore");
+        alert("Jadwal berhasil disimpan!");
+
+          async function loadDataAndRenderUI() {
+            $("loadingOverlay").style.display = "flex";
+            try {
+              const statusSnap = await getDoc(
+                doc(window.db, "status_mahasiswa", group),
+              );
+              window.inactiveCache = statusSnap.exists()
+                ? new Set(statusSnap.data().inactive || [])
+                : new Set();
+
+              const noteSnap = await getDoc(
+                doc(window.db, "catatan_jadwal", group),
+              );
+              window.noteCache =
+                noteSnap.exists() && noteSnap.data().notes
+                  ? noteSnap.data()
+                  : { notes: [] };
+
+              await fetchMonthData(group, activeMonth());
+
+              const now = new Date();
+              const day = now.getDay();
+              const diff =
+                now.getDate() - day + (day === 0 ? -6 : 1) + dashWeekOffset * 7;
+              const monday = new Date(now.setDate(diff));
+              monday.setHours(12, 0, 0, 0);
+
+              await fetchMonthData(
+                group,
+                new Date(new Date(monday).setDate(monday.getDate() + 3)),
+              );
+              await fetchMonthData(
+                group,
+                new Date(new Date(monday).setDate(monday.getDate() + 4)),
+              );
+              await fetchMonthData(
+                group,
+                new Date(new Date(monday).setDate(monday.getDate() + 5)),
+              );
+
+              renderUI();
+            } catch (e) {
+              console.error(e);
+              alert("Gagal terhubung ke Server Firebase!");
+            }
+            $("loadingOverlay").style.display = "none";
+          }
+
+          function getMonthScheduleLocal(g = group, m = activeMonth()) {
+            return window.monthCache[`${g}-${monthId(m)}`] || [];
+          }
+
+          // 7. Penggambaran Tampilan (Render)
+          function renderUI() {
+            const m = activeMonth();
+            document.body.dataset.group = group;
+
+            document.querySelector(".page-nav").style.display =
+              role === "admin" ? "flex" : "none";
+            if (
+              role !== "admin" &&
+              !$("page-dashboard").classList.contains("active")
+            )
+              switchPage("page-dashboard");
+
+            $("resetAssignments").classList.toggle("hidden", role !== "admin");
+            $("panelTitle").textContent =
+              "Jadwal " + (group === "ikhwan" ? "Ikhwan" : "Akhwat");
+            $("weekLabel").textContent = formatDate(m, {
+              month: "long",
+              year: "numeric",
+            });
+            $("subtitle").textContent =
+              role === "admin"
+                ? "Kelola penugasan bulanan."
+                : `Anda hanya dapat melihat jadwal ${group.toUpperCase()}.`;
+
+            $("scheduleRows").innerHTML = getMonthScheduleLocal()
+              .flatMap((day) => day.sessions.map((s, si) => entryHTML(day, s, si)))
+              .join("");
+            $("tausiahRows").innerHTML = getMonthScheduleLocal()
+              .filter((day) => day.day === "KAMIS")
+              .map((day) =>
+                tausiahHTML(
+                  day,
+                  day.sessions.findIndex((s) => s[0] === "Dzuhur"),
+                ),
+              )
+              .join("");
+
+            renderAssignments();
+            renderData();
+            renderDashboardTable();
+
+            const notesArray = window.noteCache.notes || [];
+            if (notesArray.length > 0) {
+              $("dashPublishedNote").innerHTML = notesArray
+                .slice()
+                .reverse()
+                .map(
+                  (n) => `
+                <div class="dash-note-container" style="margin-bottom: 12px;">
+                    <div class="dash-note-icon">!</div>
+                    <div class="dash-note-content">
+                        <div class="dash-note-text">${n.text.replace(/\n/g, "<br>")}</div>
+                        <div class="dash-note-meta">
+                            <span class="dash-note-time">${n.ts}</span>
+                            ${role === "admin" ? `<div class="dash-note-actions"><button onclick="editNote(${n.id})">Edit</button><button onclick="deleteNote(${n.id})">Hapus</button></div>` : ""}
+                        </div>
+                    </div>
+                </div>`,
+                )
+                .join("");
+            } else {
+              $("dashPublishedNote").innerHTML =
+                `<div style="color:var(--muted); font-size:13px;">Belum ada catatan yang diterbitkan admin.</div>`;
+            }
+          }
+
+          function renderData() {
+            $("dataTitle").textContent =
+              `Data Mahasiswa (${group === "ikhwan" ? "Ikhwan" : "Akhwat"})`;
+            let html = `<div class="cohort-divider-grid">ANGKATAN 2025</div>`;
+            students[group].forEach((name, i) => {
+              if (i === cohortSplit[group])
+                html += `<div class="cohort-divider-grid">ANGKATAN 2026</div>`;
+              const active = !window.inactiveCache.has(i);
+              const nim = nims[group][i];
+
+              html += `<div class="student-card" style="${active ? "" : "opacity: 0.6; filter: grayscale(1);"}">
+                ${
+                  role === "admin"
+                    ? `<button type="button" class="power-btn" data-active="${active}" onclick="toggleStudent(${i})"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg></button>`
+                    : `<div style="position: absolute; top: 16px; right: 16px;"><span style="font-size:10px; font-weight:800; color:${active ? "#15803d" : "#b42332"}">${active ? "AKTIF" : "NONAKTIF"}</span></div>`
+                }
+                <div class="student-photo">
+                    <img src="foto/${nim}.jpg" onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=eef3f9&color=123d68&size=105';" alt="Foto" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+                <div class="student-name ${active ? "" : "inactive-name"}">${name}</div>
+                <div class="student-nim">NIM: ${nim}</div>
+                <div class="student-prodi">Prodi: MPI</div>
+              </div>`;
+            });
+            $("studentDataGrid").innerHTML = html;
+          }
+
+          function renderDashboardTable() {
+            const now = new Date();
+            const day = now.getDay();
+            const diff =
+              now.getDate() - day + (day === 0 ? -6 : 1) + dashWeekOffset * 7;
+            const monday = new Date(now.setDate(diff));
+            monday.setHours(12, 0, 0, 0);
+            const sunday = new Date(monday);
+            sunday.setDate(monday.getDate() + 6);
+            $("dashDateRange").textContent =
+              `${formatDate(monday, { day: "numeric", month: "short" })} - ${formatDate(sunday, { day: "numeric", month: "short", year: "numeric" })}`;
+
+            let currentWeekDays = [];
+            const list = students[group];
+            [3, 4, 5].forEach((offset) => {
+              let targetDate = new Date(monday);
+              targetDate.setDate(monday.getDate() + offset);
+              let targetMonthSchedule = getMonthScheduleLocal(group, targetDate);
+              let dayData = targetMonthSchedule.find(
+                (d) => d.date === dateKey(targetDate),
+              );
+
+              if (dayData) {
+                let dDate = new Date(dayData.date + "T12:00:00");
+                dayData.sessions.forEach((s) => {
+                  let imamText =
+                    s[2] !== null
+                      ? list[s[2]]
+                      : "<span style='color:#f43f5e'>Kosong</span>";
+                  let muadzinText =
+                    s[3] !== null
+                      ? list[s[3]]
+                      : "<span style='color:#f43f5e'>Kosong</span>";
+                  currentWeekDays.push(
+                    `<tr><td class="date-col">${formatDate(dDate)}<br><span style="font-weight:400;color:var(--muted);font-size:10px">${dayData.day}</span></td><td>${s[0]}<br><span style="color:var(--muted);font-size:10px">${s[1]}</span></td><td class="person-col">${imamText}</td><td class="person-col">${muadzinText}</td></tr>`,
+                  );
+
+                  if (dayData.day === "KAMIS" && s[0] === "Dzuhur") {
+                    let tausiahText =
+                      s[4] !== null
+                        ? list[s[4]]
+                        : "<span style='color:#f43f5e'>Kosong</span>";
+                    currentWeekDays.push(
+                      `<tr style="background:#fffbeb"><td class="date-col">${formatDate(dDate)}<br><span style="font-weight:400;color:#735619;font-size:10px">${dayData.day} (TAUSIAH)</span></td><td>Ba'da Dzuhur</td><td class="person-col" colspan="2" style="color:#735619">${tausiahText}</td></tr>`,
+                    );
+                  }
+                });
               }
             });
+
+            $("currentWeekRows").innerHTML =
+              currentWeekDays.length === 0
+                ? `<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted)">Belum ada jadwal pekan ini.</td></tr>`
+                : currentWeekDays.join("");
           }
-        });
 
-        $("currentWeekRows").innerHTML =
-          currentWeekDays.length === 0
-            ? `<tr><td colspan="4" style="text-align:center;padding:20px;color:var(--muted)">Belum ada jadwal pekan ini.</td></tr>`
-            : currentWeekDays.join("");
-      }
-
-      function renderAssignments() {
-        const list = students[group],
-          rows = list.map((name, index) => ({
-            name,
-            index,
-            slots: [],
-            active: !window.inactiveCache.has(index),
-          }));
-        getMonthScheduleLocal().forEach((day) =>
-          day.sessions.forEach((s) => {
-            const when = formatDate(new Date(day.date + "T12:00:00"));
-            if (s[2] !== null) rows[s[2]].slots.push(`${when} ${s[0]} · Imam`);
-            if (s[3] !== null) rows[s[3]].slots.push(`${when} ${s[0]} · Muadz`);
-            if (s[4] !== null) rows[s[4]].slots.push(`${when} · Tausiah`);
-          }),
-        );
-        let tableHTML = `<tr class="cohort-divider"><td colspan="2">ANGKATAN 2025</td></tr>`;
-        rows.forEach((row, i) => {
-          if (i === cohortSplit[group])
-            tableHTML += `<tr class="cohort-divider"><td colspan="2">ANGKATAN 2026</td></tr>`;
-          tableHTML += `<tr><td class="${row.active ? "" : "inactive-name"}">${row.name}</td><td>${row.slots.length ? row.slots.map((slot) => `<span class="assignment-chip">${slot}</span>`).join("") : `<span class="assignment-empty">Belum bertugas</span>`}</td></tr>`;
-        });
-        $("assignmentRows").innerHTML = tableHTML;
-      }
-
-      // 8. Komponen Form Tabel
-      function assignmentControl(day, s, si, type, field) {
-        const list = students[group],
-          date = day.date,
-          value = s[field];
-        if (role !== "admin")
-          return `<span>${value === null ? "—" : list[value]}</span>`;
-        const cohortClass =
-          value === null
-            ? "is-unassigned"
-            : value < cohortSplit[group]
-              ? "cohort-2025"
-              : "cohort-2026";
-        const options = [2025, 2026]
-          .map(
-            (year, gi) =>
-              `<optgroup label="Tahun Ajaran ${year}">${list
-                .map((name, index) => ({ name, index }))
-                .filter(
-                  (x) =>
-                    (gi === 0
-                      ? x.index < cohortSplit[group]
-                      : x.index >= cohortSplit[group]) &&
-                    !window.inactiveCache.has(x.index),
-                )
-                .map(
-                  ({ name, index }) =>
-                    `<option value="${index}" ${index === value ? "selected" : ""}>${name}</option>`,
-                )
-                .join("")}</optgroup>`,
-          )
-          .join("");
-        return `<select class="monthly-person ${cohortClass}" onchange="changeAssignment('${date}',${si},'${type}',this.value)"><option value="">Pilih nama</option>${options}</select>`;
-      }
-      function entryHTML(day, s, si) {
-        const d = new Date(day.date + "T12:00:00");
-        return `<tr><td class="monthly-date">${formatDate(d)}<small>${day.day}</small></td><td class="monthly-time">${s[0]} · ${s[1]}</td><td>${assignmentControl(day, s, si, "IMAM", 2)}</td><td>${assignmentControl(day, s, si, "MUADZIN", 3)}</td></tr>`;
-      }
-      function tausiahHTML(day, si) {
-        const s = day.sessions[si],
-          d = new Date(day.date + "T12:00:00");
-        return `<tr><td class="monthly-date">${formatDate(d)}<small>KAMIS</small></td><td class="monthly-time">Dzuhur · ${s[1]}</td><td>${assignmentControl(day, s, si, "TAUSIAH", 4)}</td></tr>`;
-      }
-
-      // 9. Aksi Database Interaktif
-      window.changeAssignment = async (date, si, type, value) => {
-        const day = getMonthScheduleLocal().find((d) => d.date === date);
-        if (!day) return;
-        const s = day.sessions[si],
-          field = { IMAM: 2, MUADZIN: 3, TAUSIAH: 4 }[type],
-          idx = value === "" ? null : Number(value);
-        if (idx !== null && window.inactiveCache.has(idx)) {
-          alert("Mahasiswa nonaktif.");
-          renderUI();
-          return;
-        }
-        s[field] = idx;
-        await window.saveMonthSchedule();
-        renderUI();
-      };
-
-      window.resetAssignments = async () => {
-        if (!confirm("Kosongkan semua penugasan di bulan ini?")) return;
-        getMonthScheduleLocal().forEach((day) =>
-          day.sessions.forEach((s) => {
-            s[2] = null;
-            s[3] = null;
-            s[4] = null;
-          }),
-        );
-        await window.saveMonthSchedule();
-        renderUI();
-      };
-
-      window.toggleStudent = async (index) => {
-        const wasActive = !window.inactiveCache.has(index);
-        if (
-          wasActive &&
-          !confirm(
-            "Nonaktifkan mahasiswa ini? Jadwalnya di sistem akan dikosongkan.",
-          )
-        )
-          return;
-
-        wasActive
-          ? window.inactiveCache.add(index)
-          : window.inactiveCache.delete(index);
-
-        await setDoc(
-          doc(window.db, "status_mahasiswa", group),
-          { inactive: [...window.inactiveCache] },
-          { merge: true },
-        );
-
-        if (wasActive) {
-          Object.keys(window.monthCache)
-            .filter((k) => k.startsWith(`${group}-`))
-            .forEach((k) => {
-              window.monthCache[k].forEach((d) =>
-                d.sessions.forEach((s) => {
-                  for (let f = 2; f <= 4; f++) if (s[f] === index) s[f] = null;
-                }),
-              );
+          function renderAssignments() {
+            const list = students[group],
+              rows = list.map((name, index) => ({
+                name,
+                index,
+                slots: [],
+                active: !window.inactiveCache.has(index),
+              }));
+            getMonthScheduleLocal().forEach((day) =>
+              day.sessions.forEach((s) => {
+                const when = formatDate(new Date(day.date + "T12:00:00"));
+                if (s[2] !== null) rows[s[2]].slots.push(`${when} ${s[0]} · Imam`);
+                if (s[3] !== null) rows[s[3]].slots.push(`${when} ${s[0]} · Muadz`);
+                if (s[4] !== null) rows[s[4]].slots.push(`${when} · Tausiah`);
+              }),
+            );
+            let tableHTML = `<tr class="cohort-divider"><td colspan="2">ANGKATAN 2025</td></tr>`;
+            rows.forEach((row, i) => {
+              if (i === cohortSplit[group])
+                tableHTML += `<tr class="cohort-divider"><td colspan="2">ANGKATAN 2026</td></tr>`;
+              tableHTML += `<tr><td class="${row.active ? "" : "inactive-name"}">${row.name}</td><td>${row.slots.length ? row.slots.map((slot) => `<span class="assignment-chip">${slot}</span>`).join("") : `<span class="assignment-empty">Belum bertugas</span>`}</td></tr>`;
             });
-          await window.saveMonthSchedule();
-        }
-        renderUI();
-      };
-
-      window.addNote = async () => {
-        const note = $("monthNote").value.trim();
-        if (!note) {
-          alert("Isi catatan dulu!");
-          return;
-        }
-
-        const now = new Date();
-        const ts =
-          formatDate(now, { day: "2-digit", month: "short", year: "numeric" }) +
-          ", " +
-          String(now.getHours()).padStart(2, "0") +
-          ":" +
-          String(now.getMinutes()).padStart(2, "0") +
-          " WIB";
-
-        const newNoteObj = { id: Date.now(), text: note, ts: ts };
-
-        window.noteCache.notes = window.noteCache.notes || [];
-        window.noteCache.notes.push(newNoteObj);
-
-        await setDoc(
-          doc(window.db, "catatan_jadwal", group),
-          { notes: window.noteCache.notes },
-          { merge: true },
-        );
-
-        $("monthNote").value = "";
-        alert("Catatan Online Diterbitkan!");
-        renderUI();
-      };
-
-      window.editNote = async (noteId) => {
-        const targetIndex = window.noteCache.notes.findIndex(
-          (n) => n.id === noteId,
-        );
-        if (targetIndex === -1) return;
-
-        const current = window.noteCache.notes[targetIndex].text;
-        const newNote = window.prompt("Edit catatan:", current);
-
-        if (newNote !== null && newNote.trim() !== "") {
-          const now = new Date();
-          const ts =
-            formatDate(now, {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-            }) + " (Diedit)";
-
-          window.noteCache.notes[targetIndex].text = newNote.trim();
-          window.noteCache.notes[targetIndex].ts = ts;
-
-          await setDoc(
-            doc(window.db, "catatan_jadwal", group),
-            { notes: window.noteCache.notes },
-            { merge: true },
-          );
-          renderUI();
-        }
-      };
-
-      window.deleteNote = async (noteId) => {
-        if (confirm("Hapus catatan ini?")) {
-          window.noteCache.notes = window.noteCache.notes.filter(
-            (n) => n.id !== noteId,
-          );
-
-          await setDoc(
-            doc(window.db, "catatan_jadwal", group),
-            { notes: window.noteCache.notes },
-            { merge: true },
-          );
-          renderUI();
-        }
-      };
-
-      // 10. Navigasi Waktu
-      window.prevMonth = async () => {
-        monthOffset--;
-        await loadDataAndRenderUI();
-      };
-      window.nextMonth = async () => {
-        monthOffset++;
-        await loadDataAndRenderUI();
-      };
-      window.prevDashWeek = async () => {
-        dashWeekOffset--;
-        await loadDataAndRenderUI();
-      };
-      window.nextDashWeek = async () => {
-        dashWeekOffset++;
-        await loadDataAndRenderUI();
-      };
-
-      // Countdown Waktu Sholat Global (5 Waktu Setiap Hari)
-      function updateCountdown() {
-        const now = new Date();
-        // Konversi ke WIB (UTC+7)
-        const utc = now.getTime() + now.getTimezoneOffset() * 60000;
-        const wibTime = new Date(utc + 3600000 * 7);
-
-        const h = wibTime.getHours();
-        const m = wibTime.getMinutes();
-        const currentMins = h * 60 + m; // Total menit dari jam 00:00
-
-        // Estimasi statis 5 Waktu Sholat Global untuk wilayah Bogor/Depok
-        const times = [
-          { name: "Subuh", mins: 4 * 60 + 30, timeStr: "04:30" },
-          { name: "Dzuhur", mins: 11 * 60 + 40, timeStr: "11:40" }, // Mengikuti jadwal Anda
-          { name: "Ashar", mins: 14 * 60 + 55, timeStr: "14:55" }, // Mengikuti jadwal Anda
-          { name: "Maghrib", mins: 17 * 60 + 50, timeStr: "17:50" },
-          { name: "Isya", mins: 19 * 60 + 0, timeStr: "19:00" },
-        ];
-
-        let targetMins = 0;
-        let targetName = "";
-        let targetTimeStr = "";
-        let isTomorrow = false;
-
-        // 1. Cari sholat terdekat di HARI INI
-        for (let i = 0; i < times.length; i++) {
-          if (currentMins < times[i].mins) {
-            targetMins = times[i].mins;
-            targetName = times[i].name;
-            targetTimeStr = times[i].timeStr;
-            break;
+            $("assignmentRows").innerHTML = tableHTML;
           }
-        }
 
-        // 2. Jika saat ini sudah melewati Isya, maka targetnya adalah SUBUH ESOK HARI
-        if (targetName === "") {
-          targetMins = times[0].mins;
-          targetName = times[0].name;
-          targetTimeStr = times[0].timeStr;
-          isTomorrow = true;
-        }
+          // 8. Komponen Form Tabel
+          function assignmentControl(day, s, si, type, field) {
+            const list = students[group],
+              date = day.date,
+              value = s[field];
+            if (role !== "admin")
+              return `<span>${value === null ? "—" : list[value]}</span>`;
+            const cohortClass =
+              value === null
+                ? "is-unassigned"
+                : value < cohortSplit[group]
+                  ? "cohort-2025"
+                  : "cohort-2026";
+            const options = [2025, 2026]
+              .map(
+                (year, gi) =>
+                  `<optgroup label="Tahun Ajaran ${year}">${list
+                    .map((name, index) => ({ name, index }))
+                    .filter(
+                      (x) =>
+                        (gi === 0
+                          ? x.index < cohortSplit[group]
+                          : x.index >= cohortSplit[group]) &&
+                        !window.inactiveCache.has(x.index),
+                    )
+                    .map(
+                      ({ name, index }) =>
+                        `<option value="${index}" ${index === value ? "selected" : ""}>${name}</option>`,
+                    )
+                    .join("")}</optgroup>`,
+              )
+              .join("");
+            return `<select class="monthly-person ${cohortClass}" onchange="changeAssignment('${date}',${si},'${type}',this.value)"><option value="">Pilih nama</option>${options}</select>`;
+          }
+          function entryHTML(day, s, si) {
+            const d = new Date(day.date + "T12:00:00");
+            return `<tr><td class="monthly-date">${formatDate(d)}<small>${day.day}</small></td><td class="monthly-time">${s[0]} · ${s[1]}</td><td>${assignmentControl(day, s, si, "IMAM", 2)}</td><td>${assignmentControl(day, s, si, "MUADZIN", 3)}</td></tr>`;
+          }
+          function tausiahHTML(day, si) {
+            const s = day.sessions[si],
+              d = new Date(day.date + "T12:00:00");
+            return `<tr><td class="monthly-date">${formatDate(d)}<small>KAMIS</small></td><td class="monthly-time">Dzuhur · ${s[1]}</td><td>${assignmentControl(day, s, si, "TAUSIAH", 4)}</td></tr>`;
+          }
 
-        // 3. Kalkulasi selisih waktu
-        let targetDate = new Date(wibTime);
-        if (isTomorrow) {
-          targetDate.setDate(targetDate.getDate() + 1);
-        }
-        targetDate.setHours(Math.floor(targetMins / 60), targetMins % 60, 0, 0);
+          // 9. Aksi Database Interaktif
+          window.changeAssignment = async (date, si, type, value) => {
+            const day = getMonthScheduleLocal().find((d) => d.date === date);
+            if (!day) return;
+            const s = day.sessions[si],
+              field = { IMAM: 2, MUADZIN: 3, TAUSIAH: 4 }[type],
+              idx = value === "" ? null : Number(value);
+            if (idx !== null && window.inactiveCache.has(idx)) {
+              alert("Mahasiswa nonaktif.");
+              renderUI();
+              return;
+            }
+            s[field] = idx;
+            await window.saveMonthSchedule();
+            renderUI();
+          };
 
-        let diff = targetDate.getTime() - wibTime.getTime();
+          window.resetAssignments = async () => {
+            if (!confirm("Kosongkan semua penugasan di bulan ini?")) return;
+            getMonthScheduleLocal().forEach((day) =>
+              day.sessions.forEach((s) => {
+                s[2] = null;
+                s[3] = null;
+                s[4] = null;
+              }),
+            );
+            await window.saveMonthSchedule();
+            renderUI();
+          };
 
-        let hh = Math.floor(diff / 3600000);
-        let mm = Math.floor((diff % 3600000) / 60000);
-        let ss = Math.floor((diff % 60000) / 1000);
+          window.toggleStudent = async (index) => {
+            const wasActive = !window.inactiveCache.has(index);
+            if (
+              wasActive &&
+              !confirm(
+                "Nonaktifkan mahasiswa ini? Jadwalnya di sistem akan dikosongkan.",
+              )
+            )
+              return;
 
-        $("cdTime").textContent =
-          `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
+            wasActive
+              ? window.inactiveCache.add(index)
+              : window.inactiveCache.delete(index);
 
-        // Konversi nama hari ke bahasa Indonesia
-        const hariIndo = [
-          "Minggu",
-          "Senin",
-          "Selasa",
-          "Rabu",
-          "Kamis",
-          "Jumat",
-          "Sabtu",
-        ];
-        let targetHari = hariIndo[targetDate.getDay()];
+            await setDoc(
+              doc(window.db, "status_mahasiswa", group),
+              { inactive: [...window.inactiveCache] },
+              { merge: true },
+            );
 
-        $("cdTarget").textContent =
-          `${targetHari}, ${targetName} (${targetTimeStr} WIB)`;
-      }
-      setInterval(updateCountdown, 1000);
-      updateCountdown();
+            if (wasActive) {
+              Object.keys(window.monthCache)
+                .filter((k) => k.startsWith(`${group}-`))
+                .forEach((k) => {
+                  window.monthCache[k].forEach((d) =>
+                    d.sessions.forEach((s) => {
+                      for (let f = 2; f <= 4; f++) if (s[f] === index) s[f] = null;
+                    }),
+                  );
+                });
+              await window.saveMonthSchedule();
+            }
+            renderUI();
+          };
 
-      // CEK OTOMATIS SAAT HALAMAN DIMUAT (REFRESH)
-      const savedSession = localStorage.getItem("manar_session");
-      if (savedSession) {
-        const session = JSON.parse(savedSession);
-        role = session.role;
-        group = session.group;
-        $("loginOverlay").style.display = "none"; // Lewati form login
-        loadDataAndRenderUI(); // Langsung muat data dari Firebase
-      }
+          window.addNote = async () => {
+            const note = $("monthNote").value.trim();
+            if (!note) {
+              alert("Isi catatan dulu!");
+              return;
+            }
+
+            const now = new Date();
+            const ts =
+              formatDate(now, { day: "2-digit", month: "short", year: "numeric" }) +
+              ", " +
+              String(now.getHours()).padStart(2, "0") +
+              ":" +
+              String(now.getMinutes()).padStart(2, "0") +
+              " WIB";
+
+            const newNoteObj = { id: Date.now(), text: note, ts: ts };
+
+            window.noteCache.notes = window.noteCache.notes || [];
+            window.noteCache.notes.push(newNoteObj);
+
+            await setDoc(
+              doc(window.db, "catatan_jadwal", group),
+              { notes: window.noteCache.notes },
+              { merge: true },
+            );
+
+            $("monthNote").value = "";
+            alert("Catatan Online Diterbitkan!");
+            renderUI();
+          };
+
+          window.editNote = async (noteId) => {
+            const targetIndex = window.noteCache.notes.findIndex(
+              (n) => n.id === noteId,
+            );
+            if (targetIndex === -1) return;
+
+            const current = window.noteCache.notes[targetIndex].text;
+            const newNote = window.prompt("Edit catatan:", current);
+
+            if (newNote !== null && newNote.trim() !== "") {
+              const now = new Date();
+              const ts =
+                formatDate(now, {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                }) + " (Diedit)";
+
+              window.noteCache.notes[targetIndex].text = newNote.trim();
+              window.noteCache.notes[targetIndex].ts = ts;
+
+              await setDoc(
+                doc(window.db, "catatan_jadwal", group),
+                { notes: window.noteCache.notes },
+                { merge: true },
+              );
+              renderUI();
+            }
+          };
+
+          window.deleteNote = async (noteId) => {
+            if (confirm("Hapus catatan ini?")) {
+              window.noteCache.notes = window.noteCache.notes.filter(
+                (n) => n.id !== noteId,
+              );
+
+              await setDoc(
+                doc(window.db, "catatan_jadwal", group),
+                { notes: window.noteCache.notes },
+                { merge: true },
+              );
+              renderUI();
+            }
+          };
+
+          // 10. Navigasi Waktu
+          window.prevMonth = async () => {
+            monthOffset--;
+            await loadDataAndRenderUI();
+          };
+          window.nextMonth = async () => {
+            monthOffset++;
+            await loadDataAndRenderUI();
+          };
+          window.prevDashWeek = async () => {
+            dashWeekOffset--;
+            await loadDataAndRenderUI();
+          };
+          window.nextDashWeek = async () => {
+            dashWeekOffset++;
+            await loadDataAndRenderUI();
+          };
+
+          // Countdown Waktu Sholat Global (5 Waktu Setiap Hari)
+          function updateCountdown() {
+            const now = new Date();
+            // Konversi ke WIB (UTC+7)
+            const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+            const wibTime = new Date(utc + 3600000 * 7);
+
+            const h = wibTime.getHours();
+            const m = wibTime.getMinutes();
+            const currentMins = h * 60 + m; // Total menit dari jam 00:00
+
+            // Estimasi statis 5 Waktu Sholat Global untuk wilayah Bogor/Depok
+            const times = [
+              { name: "Subuh", mins: 4 * 60 + 30, timeStr: "04:30" },
+              { name: "Dzuhur", mins: 11 * 60 + 40, timeStr: "11:40" }, // Mengikuti jadwal Anda
+              { name: "Ashar", mins: 14 * 60 + 55, timeStr: "14:55" }, // Mengikuti jadwal Anda
+              { name: "Maghrib", mins: 17 * 60 + 50, timeStr: "17:50" },
+              { name: "Isya", mins: 19 * 60 + 0, timeStr: "19:00" },
+            ];
+
+            let targetMins = 0;
+            let targetName = "";
+            let targetTimeStr = "";
+            let isTomorrow = false;
+
+            // 1. Cari sholat terdekat di HARI INI
+            for (let i = 0; i < times.length; i++) {
+              if (currentMins < times[i].mins) {
+                targetMins = times[i].mins;
+                targetName = times[i].name;
+                targetTimeStr = times[i].timeStr;
+                break;
+              }
+            }
+
+            // 2. Jika saat ini sudah melewati Isya, maka targetnya adalah SUBUH ESOK HARI
+            if (targetName === "") {
+              targetMins = times[0].mins;
+              targetName = times[0].name;
+              targetTimeStr = times[0].timeStr;
+              isTomorrow = true;
+            }
+
+            // 3. Kalkulasi selisih waktu
+            let targetDate = new Date(wibTime);
+            if (isTomorrow) {
+              targetDate.setDate(targetDate.getDate() + 1);
+            }
+            targetDate.setHours(Math.floor(targetMins / 60), targetMins % 60, 0, 0);
+
+            let diff = targetDate.getTime() - wibTime.getTime();
+
+            let hh = Math.floor(diff / 3600000);
+            let mm = Math.floor((diff % 3600000) / 60000);
+            let ss = Math.floor((diff % 60000) / 1000);
+
+            $("cdTime").textContent =
+              `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
+
+            // Konversi nama hari ke bahasa Indonesia
+            const hariIndo = [
+              "Minggu",
+              "Senin",
+              "Selasa",
+              "Rabu",
+              "Kamis",
+              "Jumat",
+              "Sabtu",
+            ];
+            let targetHari = hariIndo[targetDate.getDay()];
+
+            $("cdTarget").textContent =
+              `${targetHari}, ${targetName} (${targetTimeStr} WIB)`;
+          }
+          setInterval(updateCountdown, 1000);
+          updateCountdown();
+
+          // CEK OTOMATIS SAAT HALAMAN DIMUAT (REFRESH)
+          const savedSession = localStorage.getItem("manar_session");
+          if (savedSession) {
+            const session = JSON.parse(savedSession);
+            role = session.role;
+            group = session.group;
+            $("loginOverlay").style.display = "none"; // Lewati form login
+            loadDataAndRenderUI(); // Langsung muat data dari Firebase
+          }
     </script>
   </body>
 </html>
